@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DefaultEcs;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,11 +10,15 @@ namespace GameDevIdiotsProject1
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
 
+		private World _world;
+
 		public Game1()
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
+
+			_world = new World();
 		}
 
 		protected override void Initialize()
