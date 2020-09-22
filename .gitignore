@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs/GameDevIdiotsProject1/v16
+/bin/Debug/netcoreapp3.1
+/obj
+/.vs/GameDevIdiotsProject1/DesignTimeBuild
