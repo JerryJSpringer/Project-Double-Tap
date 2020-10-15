@@ -36,16 +36,16 @@ namespace GameDevIdiotsProject1
 			_batch = new SpriteBatch(GraphicsDevice);
 			_square = Content.Load<Texture2D>("square");
 
+			
 			_world = new World(1000);
 
+			
 			_runner = new DefaultParallelRunner(Environment.ProcessorCount);
 			_system = new SequentialSystem<float>(
 				new PlayerSystem(Window, _world),
 				new VelocitySystem(_world, _runner),
 				new PositionSystem(_world, _runner),
 				new DrawSystem(_batch, _square, _world));
-
-			_world.Subscribe(this);
 
 			base.Initialize();
 		}
