@@ -8,13 +8,11 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 	public sealed class DrawSystem : AComponentSystem<float, RenderInfo>
 	{
 		private readonly SpriteBatch _batch;
-		private readonly Texture2D _square;
 
-		public DrawSystem(SpriteBatch batch, Texture2D square, World world)
+		public DrawSystem(SpriteBatch batch, World world)
 			:base(world)
 		{
 			_batch = batch;
-			_square = square;
 		}
 
 		protected override void PreUpdate(float state)
@@ -24,7 +22,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 		protected override void Update(float state, ref RenderInfo component)
 		{
-			_batch.Draw(_square, component.sprite, component.color);
+			_batch.Draw(component.sprite, component.bounds, component.color);
 		}
 
 		protected override void PostUpdate(float state)
