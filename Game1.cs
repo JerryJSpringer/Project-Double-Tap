@@ -46,6 +46,7 @@ namespace GameDevIdiotsProject1
 				new PlayerSystem(Window, _world),
 				new VelocitySystem(_world, _runner),
 				new PositionSystem(_world, _runner),
+				new AnimationSystem(_world, _runner),
 				new DrawSystem(_batch, _world));
 
 			base.Initialize();
@@ -53,7 +54,7 @@ namespace GameDevIdiotsProject1
 
 		protected override void LoadContent()
 		{
-			Player.Create(_world, Content.Load<Texture2D>("hero"));
+			Player.Create(_world, Content.Load<Texture2D>("spritesheet"));
 		}
 
 		#region game
@@ -64,17 +65,22 @@ namespace GameDevIdiotsProject1
 			GraphicsDevice.SetRenderTarget(_renderTarget);
 			GraphicsDevice.Clear(Color.White);
 
+			//Update Systems so they will draw to the RenderTarget (rather than the screen)
 			_system.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
 
 			// Render to back buffer
 			GraphicsDevice.SetRenderTarget(null);
 
+			// Set SamplerState to PointClamp so pixels aren't blurry when scaled up
 			_batch.Begin(samplerState: SamplerState.PointClamp);
+
+			//Draw rendertarget to screen
 			_batch.Draw(_renderTarget, 
 				new Rectangle(0, 0,
-					GraphicsDevice.DisplayMode.Width,
-					GraphicsDevice.DisplayMode.Height),
+					500,
+					500),
 				Color.White);
+
 			_batch.End();
 
 			base.Update(gameTime);

@@ -22,7 +22,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 		protected override void Update(float state, ref RenderInfo component)
 		{
-			_batch.Draw(component.sprite, component.bounds, component.color);
+			_batch.Draw(component.sprite, component.position, component.bounds, component.color);
 		}
 
 		protected override void PostUpdate(float state)
