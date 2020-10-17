@@ -69,8 +69,7 @@ namespace GameDevIdiotsProject1
 			// Render to back buffer
 			GraphicsDevice.SetRenderTarget(null);
 
-			_batch.Begin(default, default, SamplerState.PointClamp,
-				default, default, default, default);
+			_batch.Begin(samplerState: SamplerState.PointClamp);
 			_batch.Draw(_renderTarget, 
 				new Rectangle(0, 0,
 					GraphicsDevice.DisplayMode.Width,
