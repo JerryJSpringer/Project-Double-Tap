@@ -1,7 +1,10 @@
 ﻿using DefaultEcs;
 using GameDevIdiotsProject1.DefaultEcs.Components;
+using GameDevIdiotsProject1.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Entities
 {
@@ -17,12 +20,32 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				Value = new Vector2(),
 				speed = .2f
 			});
-			player.Set(new RenderInfo
-			{
+			player.Set(new RenderInfo {
 				sprite = texture,
-				bounds = new Rectangle(0, 0, 16, 16),
+				bounds = new Rectangle(40, 0, 44, 52),
+				position = new Vector2(0, 0),
 				color = Color.White
 			});
+
+			
+			// Animations
+			var AnimationTable = new Dictionary<string, Animation>();
+
+			// CREATE ANIMATIONS
+			Animation walkDown = new Animation();
+			walkDown.AddFrame(new Rectangle(848, 0, 44, 52), TimeSpan.FromSeconds(.5));
+			walkDown.AddFrame(new Rectangle(936, 0, 44, 52), TimeSpan.FromSeconds(.5));
+			walkDown.AddFrame(new Rectangle(980, 0, 44, 52), TimeSpan.FromSeconds(.5));
+
+			// Add to List
+			AnimationTable["walk-down"] = walkDown;
+
+			//set animations
+			player.Set(new Animate {
+				AnimationList = AnimationTable,
+				currentAnimation = "walk-down"
+			});
+			
 		}
 	}
 }

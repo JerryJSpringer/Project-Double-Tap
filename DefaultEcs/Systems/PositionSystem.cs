@@ -21,8 +21,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 
-			renderInfo.bounds.X = (int)position.X - (renderInfo.bounds.Width / 2);
-			renderInfo.bounds.Y = (int)position.Y - (renderInfo.bounds.Height / 2);
+			renderInfo.position.X = (int)position.X - (renderInfo.bounds.Width / 2);
+			renderInfo.position.Y = (int)position.Y - (renderInfo.bounds.Height / 2);
 		}
 	}
 }
