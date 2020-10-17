@@ -2,10 +2,7 @@
 using DefaultEcs.System;
 using DefaultEcs.Threading;
 using GameDevIdiotsProject1.DefaultEcs.Components;
-using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
@@ -24,8 +21,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 
-			renderInfo.sprite.X = (int)position.X - (renderInfo.sprite.Width / 2);
-			renderInfo.sprite.Y = (int)position.Y - (renderInfo.sprite.Height / 2);
+			renderInfo.bounds.X = (int)position.X - (renderInfo.bounds.Width / 2);
+			renderInfo.bounds.Y = (int)position.Y - (renderInfo.bounds.Height / 2);
 		}
 	}
 }

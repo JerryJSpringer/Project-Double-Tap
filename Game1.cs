@@ -14,19 +14,20 @@ namespace GameDevIdiotsProject1
 		#region Fields 
 
 		private readonly GraphicsDeviceManager _graphics;
+		private RenderTarget2D _renderTarget;
 		private SpriteBatch _batch;
 		private World _world;
 
 		private DefaultParallelRunner _runner;
 		private ISystem<float> _system;
 
-		private Texture2D _square;
-
 		#endregion
 
 		public Game1()
 		{
 			_graphics = new GraphicsDeviceManager(this);
+			IsFixedTimeStep = true;
+			TargetElapsedTime = TimeSpan.FromSeconds(1 / 60f);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 		}
@@ -34,7 +35,7 @@ namespace GameDevIdiotsProject1
 		protected override void Initialize()
 		{
 			_batch = new SpriteBatch(GraphicsDevice);
-			_square = Content.Load<Texture2D>("square");
+			_renderTarget = new RenderTarget2D(GraphicsDevice, 320, 320);
 
 			
 			_world = new World(1000);
@@ -45,22 +46,37 @@ namespace GameDevIdiotsProject1
 				new PlayerSystem(Window, _world),
 				new VelocitySystem(_world, _runner),
 				new PositionSystem(_world, _runner),
-				new DrawSystem(_batch, _square, _world));
+				new DrawSystem(_batch, _world));
 
 			base.Initialize();
 		}
 
 		protected override void LoadContent()
 		{
-			Player.Create(_world);
+			Player.Create(_world, Content.Load<Texture2D>("hero"));
 		}
 
 		#region game
 
 		protected override void Update(GameTime gameTime)
 		{
+			// Render to RenderTarget
+			GraphicsDevice.SetRenderTarget(_renderTarget);
 			GraphicsDevice.Clear(Color.White);
+
 			_system.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
+
+			// Render to back buffer
+			GraphicsDevice.SetRenderTarget(null);
+
+			_batch.Begin(default, default, SamplerState.PointClamp,
+				default, default, default, default);
+			_batch.Draw(_renderTarget, 
+				new Rectangle(0, 0,
+					GraphicsDevice.DisplayMode.Width,
+					GraphicsDevice.DisplayMode.Height),
+				Color.White);
+			_batch.End();
 
 			base.Update(gameTime);
 		}
@@ -70,7 +86,6 @@ namespace GameDevIdiotsProject1
 			_runner.Dispose();
 			_world.Dispose();
 			_system.Dispose();
-			_square.Dispose();
 			_batch.Dispose();
 			_graphics.Dispose();
 			base.Dispose(disposing);

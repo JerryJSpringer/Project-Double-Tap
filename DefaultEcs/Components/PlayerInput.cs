@@ -1,5 +1,4 @@
-﻿
-namespace GameDevIdiotsProject1.DefaultEcs.Components
+﻿namespace GameDevIdiotsProject1.DefaultEcs.Components
 {
 	public struct PlayerInput
 	{
