@@ -34,15 +34,16 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 			velocity.Value.X = 0;
 			velocity.Value.Y = 0;
+			float speed = velocity.speed;
 
 			if (_keyState.IsKeyDown(Keys.D))
-				velocity.Value.X += 1;
+				velocity.Value.X += speed;
 			if (_keyState.IsKeyDown(Keys.A))
-				velocity.Value.X -= 1;
+				velocity.Value.X -= speed;
 			if (_keyState.IsKeyDown(Keys.W))
-				velocity.Value.Y -= 1;
+				velocity.Value.Y -= speed;
 			if (_keyState.IsKeyDown(Keys.S))
-				velocity.Value.Y += 1;
+				velocity.Value.Y += speed;
 		}
 	}
 }
