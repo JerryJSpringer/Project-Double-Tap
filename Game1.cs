@@ -18,7 +18,6 @@ namespace GameDevIdiotsProject1
 		private SpriteBatch _batch;
 		private World _world;
 
-		private DefaultParallelRunner _runner;
 		private ISystem<float> _system;
 
 		private const int GAME_SIZE = 500;
@@ -94,7 +93,6 @@ namespace GameDevIdiotsProject1
 
 		protected override void Dispose(bool disposing)
 		{
-			_runner.Dispose();
 			_world.Dispose();
 			_system.Dispose();
 			_batch.Dispose();
