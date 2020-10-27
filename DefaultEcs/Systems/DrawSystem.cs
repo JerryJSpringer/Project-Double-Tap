@@ -1,5 +1,6 @@
 ﻿using DefaultEcs;
 using DefaultEcs.System;
+using DefaultEcs.Threading;
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using Microsoft.Xna.Framework.Graphics;
 

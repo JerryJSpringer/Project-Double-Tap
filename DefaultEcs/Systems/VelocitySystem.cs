@@ -8,11 +8,11 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
 	public sealed class VelocitySystem : AEntitySystem<float>
 	{
-		public VelocitySystem(World world, IParallelRunner runner)
+		public VelocitySystem(World world)
 			:base(world.GetEntities()
 				.With<Velocity>()
 				.With<Position>()
-				.AsSet(), runner)
+				.AsSet())
 		{
 		}
 
