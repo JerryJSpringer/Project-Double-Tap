@@ -50,16 +50,13 @@ namespace GameDevIdiotsProject1
 			_batch = new SpriteBatch(GraphicsDevice);
 			_renderTarget = new RenderTarget2D(GraphicsDevice, GAME_SIZE, GAME_SIZE);
 
-			
 			_world = new World(1000);
 
-			
-			_runner = new DefaultParallelRunner(Environment.ProcessorCount);
 			_system = new SequentialSystem<float>(
 				new PlayerSystem(Window, _world),
-				new VelocitySystem(_world, _runner),
-				new PositionSystem(_world, _runner),
-				new AnimationSystem(_world, _runner),
+				new VelocitySystem(_world),
+				new PositionSystem(_world),
+				new AnimationSystem(_world),
 				new DrawSystem(_batch, _world));
 
 			base.Initialize();

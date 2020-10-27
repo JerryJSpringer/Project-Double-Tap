@@ -8,11 +8,11 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
 	public sealed class PositionSystem : AEntitySystem<float>
 	{
-		public PositionSystem(World world, IParallelRunner runner) :
+		public PositionSystem(World world) :
 			base(world.GetEntities()
 				.With<Position>()
 				.With<RenderInfo>()
-				.AsSet(), runner)
+				.AsSet())
 		{
 		}
 

@@ -6,11 +6,11 @@ using GameDevIdiotsProject1.Graphics;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 	public sealed class AnimationSystem : AEntitySystem<float> {
-		public AnimationSystem(World world, IParallelRunner runner)
+		public AnimationSystem(World world)
 			: base(world.GetEntities()
 				.With<Animate>()
 				.With<RenderInfo>()
-				.AsSet(), runner) {
+				.AsSet()) {
 		}
 
 		protected override void Update(float state, in Entity entity) {
@@ -25,7 +25,6 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 
 			//update renderInfo
 			renderInfo.bounds = currentAnimation.CurrentRectangle;
-
 		}
 	}
 }
