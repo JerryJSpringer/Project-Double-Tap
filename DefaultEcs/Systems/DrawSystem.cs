@@ -2,6 +2,7 @@
 using DefaultEcs.System;
 using DefaultEcs.Threading;
 using GameDevIdiotsProject1.DefaultEcs.Components;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
@@ -23,7 +24,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 		protected override void Update(float state, ref RenderInfo component)
 		{
-			_batch.Draw(component.sprite, component.position, component.bounds, component.color);
+			_batch.Draw(component.sprite, component.position, component.bounds, component.color, 0f, new Vector2(0,0), 1f, (component.flip) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
 		}
 
 		protected override void PostUpdate(float state)

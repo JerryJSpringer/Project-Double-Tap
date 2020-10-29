@@ -8,5 +8,6 @@ namespace GameDevIdiotsProject1.DefaultEcs.Components
 		public Rectangle bounds;
 		public Vector2 position;
 		public Color color;
+		public bool flip;
 	}
 }

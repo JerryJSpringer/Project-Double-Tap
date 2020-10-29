@@ -24,7 +24,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				sprite = texture,
 				bounds = new Rectangle(40, 0, 44, 52),
 				position = new Vector2(0, 0),
-				color = Color.White
+				color = Color.White,
+				flip = false
 			});
 
 			
