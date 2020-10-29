@@ -21,7 +21,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 			Animation currentAnimation = animateInfo.AnimationList[animateInfo.currentAnimation];
 
 			// update animation
-			currentAnimation.Update(state);
+			currentAnimation.Update(state / 1000);
 
 			//update renderInfo
 			renderInfo.bounds = currentAnimation.CurrentRectangle;
