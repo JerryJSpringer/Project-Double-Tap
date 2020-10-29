@@ -33,9 +33,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 			// CREATE ANIMATIONS
 			Animation walkDown = new Animation();
-			walkDown.AddFrame(new Rectangle(848, 0, 44, 52), TimeSpan.FromSeconds(.5));
-			walkDown.AddFrame(new Rectangle(936, 0, 44, 52), TimeSpan.FromSeconds(.5));
-			walkDown.AddFrame(new Rectangle(980, 0, 44, 52), TimeSpan.FromSeconds(.5));
+			walkDown.AddFrame(new Rectangle(848, 0, 44, 52), TimeSpan.FromSeconds(0.25));
+			walkDown.AddFrame(new Rectangle(936, 0, 44, 52), TimeSpan.FromSeconds(0.25));
+			walkDown.AddFrame(new Rectangle(980, 0, 44, 52), TimeSpan.FromSeconds(0.25));
 
 			// Add to List
 			AnimationTable["walk-down"] = walkDown;
