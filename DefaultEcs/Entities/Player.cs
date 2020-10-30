@@ -10,6 +10,14 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 {
 	public static class Player
 	{
+        #region animation-constants
+
+        private const int WALK_SPRITE_HEIGHT = 80;
+		private const int WALK_SPRITE_WIDTH = 80;
+        private const double WALK_FRAME_LENGTH = 0.08;
+
+		#endregion
+
 		public static void Create(World world, Texture2D texture)
 		{
 			Entity player = world.CreateEntity();
@@ -34,9 +42,15 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 			// CREATE ANIMATIONS
 			Animation walkDown = new Animation();
-			walkDown.AddFrame(new Rectangle(848, 0, 44, 52), TimeSpan.FromSeconds(0.25));
-			walkDown.AddFrame(new Rectangle(936, 0, 44, 52), TimeSpan.FromSeconds(0.25));
-			walkDown.AddFrame(new Rectangle(980, 0, 44, 52), TimeSpan.FromSeconds(0.25));
+			walkDown.AddFrame(new Rectangle(0, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 2, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 3, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 4, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 5, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 6, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 7, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 8, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
 
 			// Add to List
 			AnimationTable["walk-down"] = walkDown;
