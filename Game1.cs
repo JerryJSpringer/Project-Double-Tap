@@ -63,7 +63,7 @@ namespace GameDevIdiotsProject1
 
 		protected override void LoadContent()
 		{
-			Player.Create(_world, Content.Load<Texture2D>("spritesheet"));
+			Player.Create(_world, Content.Load<Texture2D>("gremlin"));
 		}
 
 		#region game
