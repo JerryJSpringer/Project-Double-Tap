@@ -5,6 +5,11 @@ using GameDevIdiotsProject1.DefaultEcs.Entities;
 using GameDevIdiotsProject1.DefaultEcs.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
+//TILED IMPORTS
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
+
 using System;
 
 namespace GameDevIdiotsProject1
@@ -24,6 +29,10 @@ namespace GameDevIdiotsProject1
 		private int renderSize = 500;
 		private int xpad = 0;
 		private int ypad = 0;
+
+		//Tiled Fields
+		private TiledMap _tiledMap;
+		private TiledMapRenderer _tiledMapRenderer;
 
 		#endregion
 
@@ -64,6 +73,10 @@ namespace GameDevIdiotsProject1
 		protected override void LoadContent()
 		{
 			Player.Create(_world, Content.Load<Texture2D>("gremlin"));
+
+			//load tiledmap resources
+			_tiledMap = Content.Load<TiledMap>("samplemap");
+			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
 		}
 
 		#region game
@@ -74,8 +87,13 @@ namespace GameDevIdiotsProject1
 			GraphicsDevice.SetRenderTarget(_renderTarget);
 			GraphicsDevice.Clear(Color.White);
 
+			//Update tiled map first so sprites render on top
+			_tiledMapRenderer.Update(gameTime);
+			_tiledMapRenderer.Draw();
+
 			//Update Systems so they will draw to the RenderTarget (rather than the screen)
 			_system.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
+			
 
 			// Render to back buffer
 			GraphicsDevice.SetRenderTarget(null);
