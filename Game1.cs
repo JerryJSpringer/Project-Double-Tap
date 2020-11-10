@@ -5,6 +5,8 @@ using GameDevIdiotsProject1.DefaultEcs.Entities;
 using GameDevIdiotsProject1.DefaultEcs.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.ViewportAdapters;
 
 //TILED IMPORTS
 using MonoGame.Extended.Tiled;
@@ -34,6 +36,9 @@ namespace GameDevIdiotsProject1
 		private TiledMap _tiledMap;
 		private TiledMapRenderer _tiledMapRenderer;
 
+		//Camera
+		private OrthographicCamera _camera;
+
 		#endregion
 
 		public Game1()
@@ -59,13 +64,14 @@ namespace GameDevIdiotsProject1
 			_renderTarget = new RenderTarget2D(GraphicsDevice, GAME_SIZE, GAME_SIZE);
 
 			_world = new World(1000);
+			_camera = new OrthographicCamera(GraphicsDevice);
 
 			_system = new SequentialSystem<float>(
 				new PlayerSystem(Window, _world),
 				new VelocitySystem(_world),
 				new PositionSystem(_world),
 				new AnimationSystem(_world),
-				new DrawSystem(_batch, _world));
+				new DrawSystem(_batch, _world, _camera));
 
 			base.Initialize();
 		}
@@ -89,7 +95,7 @@ namespace GameDevIdiotsProject1
 
 			//Update tiled map first so sprites render on top
 			_tiledMapRenderer.Update(gameTime);
-			_tiledMapRenderer.Draw();
+			_tiledMapRenderer.Draw(_camera.GetViewMatrix());
 
 			//Update Systems so they will draw to the RenderTarget (rather than the screen)
 			_system.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
