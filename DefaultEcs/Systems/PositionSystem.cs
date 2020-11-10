@@ -1,6 +1,5 @@
 ﻿using DefaultEcs;
 using DefaultEcs.System;
-using DefaultEcs.Threading;
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using Microsoft.Xna.Framework;
 
@@ -21,8 +20,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 
-			renderInfo.position.X = (int)position.X - (renderInfo.bounds.Width / 2);
-			renderInfo.position.Y = (int)position.Y - (renderInfo.bounds.Height / 2);
+			renderInfo.position.X = position.X - (renderInfo.bounds.Width / 2);
+			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height / 2);
 		}
 	}
 }
