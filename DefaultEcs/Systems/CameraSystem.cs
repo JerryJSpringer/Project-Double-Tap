@@ -1,9 +1,7 @@
 ﻿using DefaultEcs;
 using DefaultEcs.System;
 using GameDevIdiotsProject1.DefaultEcs.Components;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using System.Numerics;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
