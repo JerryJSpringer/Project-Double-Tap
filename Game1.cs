@@ -1,12 +1,10 @@
 ﻿using DefaultEcs;
 using DefaultEcs.System;
-using DefaultEcs.Threading;
 using GameDevIdiotsProject1.DefaultEcs.Entities;
 using GameDevIdiotsProject1.DefaultEcs.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using MonoGame.Extended.ViewportAdapters;
 
 //TILED IMPORTS
 using MonoGame.Extended.Tiled;
@@ -71,6 +69,7 @@ namespace GameDevIdiotsProject1
 				new VelocitySystem(_world),
 				new PositionSystem(_world),
 				new AnimationSystem(_world),
+				new CameraSystem(_world, _camera),
 				new DrawSystem(_batch, _world, _camera));
 
 			base.Initialize();
@@ -89,6 +88,9 @@ namespace GameDevIdiotsProject1
 
 		protected override void Update(GameTime gameTime)
 		{
+
+			float time = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
 			// Render to RenderTarget
 			GraphicsDevice.SetRenderTarget(_renderTarget);
 			GraphicsDevice.Clear(Color.White);
@@ -98,7 +100,7 @@ namespace GameDevIdiotsProject1
 			_tiledMapRenderer.Draw(_camera.GetViewMatrix());
 
 			//Update Systems so they will draw to the RenderTarget (rather than the screen)
-			_system.Update((float)gameTime.ElapsedGameTime.TotalMilliseconds);
+			_system.Update(time);
 			
 
 			// Render to back buffer
