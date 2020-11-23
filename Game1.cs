@@ -5,6 +5,7 @@ using GameDevIdiotsProject1.DefaultEcs.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 
 //TILED IMPORTS
 using MonoGame.Extended.Tiled;
@@ -19,6 +20,7 @@ namespace GameDevIdiotsProject1
 		#region Fields 
 
 		private readonly GraphicsDeviceManager _graphics;
+		private CollisionComponent _collisionComponent;
 		private RenderTarget2D _renderTarget;
 		private SpriteBatch _batch;
 		private World _world;
@@ -46,7 +48,7 @@ namespace GameDevIdiotsProject1
 			TargetElapsedTime = TimeSpan.FromSeconds(1 / 60f);
 
 			Window.AllowUserResizing = true;
-			Window.ClientSizeChanged += onResize;
+			Window.ClientSizeChanged += OnResize;
 
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
@@ -77,11 +79,16 @@ namespace GameDevIdiotsProject1
 
 		protected override void LoadContent()
 		{
-			Player.Create(_world, Content.Load<Texture2D>("gremlin"));
-
 			//load tiledmap resources
 			_tiledMap = Content.Load<TiledMap>("samplemap");
 			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
+
+			_collisionComponent = new CollisionComponent(
+				new RectangleF(0, 0, _tiledMap.Width, _tiledMap.Height));
+
+			Player.Create(_world, 
+				_collisionComponent,
+				Content.Load<Texture2D>("gremlin"));
 		}
 
 		#region game
@@ -130,7 +137,7 @@ namespace GameDevIdiotsProject1
 
 		#region window
 
-		public void onResize(Object sender, EventArgs e)
+		public void OnResize(Object sender, EventArgs e)
 		{
 			int x = Window.ClientBounds.Width;
 			int y = Window.ClientBounds.Height;
