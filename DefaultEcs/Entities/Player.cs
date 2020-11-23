@@ -3,6 +3,8 @@ using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 using System;
 using System.Collections.Generic;
 
@@ -18,7 +20,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 		#endregion
 
-		public static void Create(World world, Texture2D texture)
+		public static void Create(World world, CollisionComponent collisionComponent, Texture2D texture)
 		{
 			Entity player = world.CreateEntity();
 			player.Set<PlayerInput>(default);
@@ -34,6 +36,11 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				position = new Vector2(0, 0),
 				color = Color.White,
 				flip = false
+			});
+
+			// Collision
+			player.Set(new Collision {
+				collisionActor = new CollisionActorEntity(new RectangleF(40, 0, 44, 52))
 			});
 
 			
@@ -60,7 +67,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				AnimationList = AnimationTable,
 				currentAnimation = "walk-down"
 			});
-			
+
 		}
 	}
 }
