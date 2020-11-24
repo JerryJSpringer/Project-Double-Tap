@@ -12,13 +12,13 @@ namespace GameDevIdiotsProject1.DefaultEcs.Components
         }
 	}
 
-	/// <summary>
-	/// Used to 
-	/// </summary>
 	public class CollisionActorEntity : ICollisionActor
 	{
 		public IShapeF Bounds { get; }
 		public Type type;
+
+		//counter to help debug collisions
+		private static int _counter;
 
 		public CollisionActorEntity(IShapeF bounds, Type type)
 		{
@@ -29,7 +29,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Components
 		public void OnCollision(CollisionEventArgs collisionInfo)
 		{
 			CollisionActorEntity other = (CollisionActorEntity) collisionInfo.Other;
-			Console.WriteLine(other.type);
+
+			//for debugging collision - change project to Console Application to see output
+			Console.WriteLine("Collide " + _counter++);
 		}
 
 		public enum Type {

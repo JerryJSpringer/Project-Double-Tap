@@ -84,7 +84,7 @@ namespace GameDevIdiotsProject1
 			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
 
 			_collisionComponent = new CollisionComponent(
-				new RectangleF(0, 0, _tiledMap.Width, _tiledMap.Height));
+				new RectangleF(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels));
 
 			Player.Create(_world, 
 				_collisionComponent,

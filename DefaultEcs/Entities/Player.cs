@@ -26,7 +26,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			player.Set<PlayerInput>(default);
 			player.Set(new Position
 			{
-				Value = new Vector2(40, 40)
+				Value = new Vector2(0, 0)
 			});
 			player.Set(new Velocity
 			{
@@ -35,14 +35,13 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			});
 			player.Set(new RenderInfo {
 				sprite = texture,
-				bounds = new Rectangle(40, 0, 44, 52),
-				position = new Vector2(0, 0),
+				bounds = new Rectangle(0, 0, 80, 80),
 				color = Color.White,
 				flip = false
 			});
 
 			// Collision
-			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, 44, 52), CollisionActorEntity.Type.PlayerCollision);
+			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), CollisionActorEntity.Type.PlayerCollision);
 			player.Set(new Collision(actor));
 			collisionComponent.Insert(actor);
 
