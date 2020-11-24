@@ -89,15 +89,17 @@ namespace GameDevIdiotsProject1
 			Player.Create(_world, 
 				_collisionComponent,
 				Content.Load<Texture2D>("gremlin"));
+
+			Wall.Create(_world,
+				_collisionComponent,
+				Content.Load<Texture2D>("gremlin"));
+
 		}
 
 		#region game
 
 		protected override void Update(GameTime gameTime)
 		{
-
-			float time = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
 			// Render to RenderTarget
 			GraphicsDevice.SetRenderTarget(_renderTarget);
 			GraphicsDevice.Clear(Color.White);
@@ -107,8 +109,8 @@ namespace GameDevIdiotsProject1
 			_tiledMapRenderer.Draw(_camera.GetViewMatrix());
 
 			//Update Systems so they will draw to the RenderTarget (rather than the screen)
-			_system.Update(time);
-			
+			_system.Update((float) gameTime.ElapsedGameTime.TotalMilliseconds);
+			_collisionComponent.Update(gameTime);
 
 			// Render to back buffer
 			GraphicsDevice.SetRenderTarget(null);
