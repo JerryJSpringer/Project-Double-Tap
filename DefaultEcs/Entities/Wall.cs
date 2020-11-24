@@ -17,11 +17,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				Value = new Vector2(40, 40)
 			});
 
-			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, 44, 52));
-			wall.Set(new Collision
-			{
-				collisionActor = actor
-			});
+			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, 44, 52), CollisionActorEntity.Type.MonsterCollision);
+			wall.Set(new Collision(actor));
 			collisionComponent.Insert(actor);
 
 			wall.Set(new RenderInfo

@@ -42,8 +42,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			});
 
 			// Collision
-			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, 44, 52));
-			player.Set(new Collision(actor, CollisionActorEntity.Type.PlayerCollision));
+			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, 44, 52), CollisionActorEntity.Type.PlayerCollision);
+			player.Set(new Collision(actor));
 			collisionComponent.Insert(actor);
 
 			
