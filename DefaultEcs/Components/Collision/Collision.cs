@@ -1,39 +1,43 @@
 ﻿using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Components
 {
 	public struct Collision {
 		public ICollisionActor collisionActor;
-		public CollisionActorEntity.Type type;
 
-		public Collision(ICollisionActor aActor, CollisionActorEntity.Type aType) { //?
+		public Collision(ICollisionActor aActor) { //?
 			collisionActor = aActor;
-            type = aType;
         }
 	}
 
+	/// <summary>
+	/// Used to 
+	/// </summary>
 	public class CollisionActorEntity : ICollisionActor
 	{
 		public IShapeF Bounds { get; }
 		public Type type;
 
-		public CollisionActorEntity(IShapeF bounds)
+		public CollisionActorEntity(IShapeF bounds, Type type)
 		{
 			Bounds = bounds;
+			this.type = type;
 		}
 		
 		public void OnCollision(CollisionEventArgs collisionInfo)
 		{
 			CollisionActorEntity other = (CollisionActorEntity) collisionInfo.Other;
+			Console.WriteLine(other.type);
 		}
 
 		public enum Type {
 			// Take damage
-			DamageCollision = 0,
+			NormalCollision = 0,
 
 			// Stop moving
-			NormalCollision = 1,
+			DamageCollision = 1,
 
 			// Pickup item
 			ItemPickupCollision = 2,
