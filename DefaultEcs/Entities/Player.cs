@@ -24,7 +24,10 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 		{
 			Entity player = world.CreateEntity();
 			player.Set<PlayerInput>(default);
-			player.Set<Position>(default);
+			player.Set(new Position
+			{
+				Value = new Vector2(40, 40)
+			});
 			player.Set(new Velocity
 			{
 				Value = new Vector2(),
@@ -39,9 +42,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			});
 
 			// Collision
-			player.Set(new Collision {
-				collisionActor = new CollisionActorEntity(new RectangleF(40, 0, 44, 52))
-			});
+			CollisionActorEntity actor = new CollisionActorEntity(new RectangleF(0, 0, 44, 52));
+			player.Set(new Collision(actor, CollisionActorEntity.Type.PlayerCollision));
+			collisionComponent.Insert(actor);
 
 			
 			// Animations
