@@ -67,12 +67,13 @@ namespace GameDevIdiotsProject1
 			_camera = new OrthographicCamera(GraphicsDevice);
 
 			_system = new SequentialSystem<float>(
-				new PlayerSystem(Window, _world),
-				new VelocitySystem(_world),
-				new PositionSystem(_world),
-				new AnimationSystem(_world),
-				new CameraSystem(_world, _camera),
-				new DrawSystem(_batch, _world, _camera));
+					new PlayerSystem(Window, _world),
+					new VelocitySystem(_world),
+					new PositionSystem(_world),
+					new AnimationSystem(_world),
+					new CameraSystem(_world, _camera),
+					new DrawSystem(_world, _batch, _camera),
+					new DebugSystem(_world, _batch, _camera));
 
 			base.Initialize();
 		}
@@ -84,7 +85,7 @@ namespace GameDevIdiotsProject1
 			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
 
 			_collisionComponent = new CollisionComponent(
-				new RectangleF(0, 0, _tiledMap.Width, _tiledMap.Height));
+				new RectangleF(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels));
 
 			Player.Create(_world, 
 				_collisionComponent,

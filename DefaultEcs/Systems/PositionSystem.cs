@@ -3,6 +3,7 @@ using DefaultEcs.System;
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
@@ -26,10 +27,18 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			renderInfo.position.X = position.X - (renderInfo.bounds.Width / 2);
 			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height / 2);
 
-			IShapeF shape = collision.collisionActor.Bounds;
-			shape.Position = new Vector2(
-				position.X - (renderInfo.bounds.Width / 2),
-				position.Y - (renderInfo.bounds.Height / 2));
+			if (collision.collisionActor.Bounds is RectangleF rectangle)
+			{
+				rectangle.Position = new Vector2(
+					position.X - (rectangle.Width / 2),
+					position.Y - (rectangle.Height / 2));
+
+				collision.collisionActor.Bounds.Position = rectangle.Position;
+			}
+			else if (collision.collisionActor.Bounds is CircleF)
+			{
+				collision.collisionActor.Bounds.Position = position;
+			}
 		}
 	}
 }
