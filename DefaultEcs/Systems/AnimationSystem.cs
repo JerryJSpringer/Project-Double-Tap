@@ -1,10 +1,8 @@
 ﻿using DefaultEcs;
 using DefaultEcs.System;
-using DefaultEcs.Threading;
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 	public sealed class AnimationSystem : AEntitySystem<float> {

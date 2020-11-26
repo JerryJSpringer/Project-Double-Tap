@@ -9,9 +9,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 	{
 		public VelocitySystem(World world)
 			:base(world.GetEntities()
-				.With<Velocity>()
-				.With<Position>()
-				.AsSet())
+				 .With<Velocity>()
+				 .With<Position>()
+				 .AsSet())
 		{
 		}
 
