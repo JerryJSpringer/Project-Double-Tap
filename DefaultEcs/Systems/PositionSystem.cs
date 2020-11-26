@@ -20,24 +20,25 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 		protected override void Update(float state, in Entity entity)
 		{
-			ref Vector2 position = ref entity.Get<Position>().Value;
+			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 			ref Collision collision = ref entity.Get<Collision>();
-
-			//move npc for testing purposes
-			if (!entity.Has<PlayerInput>()) {
-				position.X += .02f * state;
-			}
 
 			renderInfo.position.X = position.X - (renderInfo.bounds.Width / 2);
 			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height / 2);
 
-			//collision bounds should match render bounds for now
-			collision.collisionActor.Bounds.Position = renderInfo.position;
-			
-			//send collision bounds to RenderInfo for debugging purposes
-			renderInfo.collisionBounds = collision.collisionActor.Bounds;
-			
+			if (collision.collisionActor.Bounds is RectangleF rectangle)
+			{
+				rectangle.Position = new Vector2(
+					position.X - (rectangle.Width / 2),
+					position.Y - (rectangle.Height / 2));
+
+				collision.collisionActor.Bounds.Position = rectangle.Position;
+			}
+			else if (collision.collisionActor.Bounds is CircleF)
+			{
+				collision.collisionActor.Bounds.Position = position;
+			}
 		}
 	}
 }
