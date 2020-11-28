@@ -64,6 +64,10 @@ namespace GameDevIdiotsProject1
 			_renderTarget = new RenderTarget2D(GraphicsDevice, GAME_SIZE, GAME_SIZE);
 
 			_world = new World(1000);
+
+			//load tiledmap resources
+			_tiledMap = Content.Load<TiledMap>("samplemap");
+			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
 			_camera = new OrthographicCamera(GraphicsDevice);
 
 			_system = new SequentialSystem<float>(
@@ -71,7 +75,7 @@ namespace GameDevIdiotsProject1
 					new VelocitySystem(_world),
 					new PositionSystem(_world),
 					new AnimationSystem(_world),
-					new CameraSystem(_world, _camera),
+					new CameraSystem(_world, _camera, _tiledMap),
 					new DrawSystem(_world, _batch, _camera),
 					new DebugSystem(_world, _batch, _camera));
 
@@ -80,10 +84,6 @@ namespace GameDevIdiotsProject1
 
 		protected override void LoadContent()
 		{
-			//load tiledmap resources
-			_tiledMap = Content.Load<TiledMap>("samplemap");
-			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
-
 			_collisionComponent = new CollisionComponent(
 				new RectangleF(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels));
 
