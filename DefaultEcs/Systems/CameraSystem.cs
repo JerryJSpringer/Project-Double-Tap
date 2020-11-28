@@ -1,26 +1,44 @@
 ﻿using DefaultEcs;
 using DefaultEcs.System;
 using GameDevIdiotsProject1.DefaultEcs.Components;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.Tiled;
+using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
 	public sealed class CameraSystem : AEntitySystem<float>
 	{
-		private readonly OrthographicCamera _camera;
+		
+        private const int GAMEWINDOW_SIZE = 250; //in the future this will likely need to be split into X & Y
+        private readonly OrthographicCamera _camera;
+		private readonly TiledMap _tiledMap;
 
-		public CameraSystem(World world, OrthographicCamera camera) :
+		public CameraSystem(World world, OrthographicCamera camera, TiledMap tiledMap) :
 			base(world.GetEntities()
 				.With<PlayerInput>()
 				.With<RenderInfo>()
 				.AsSet())		
 		{
 			_camera = camera;
+			_tiledMap = tiledMap;
 		}
 
 		protected override void Update(float state, in Entity entity)
 		{
-			_camera.LookAt(entity.Get<Position>().Value);
+			Vector2 pos = new Vector2();
+			
+			pos.X = (entity.Get<Position>().Value.X <= GAMEWINDOW_SIZE) ? GAMEWINDOW_SIZE 
+				: (entity.Get<Position>().Value.X >= _tiledMap.WidthInPixels - GAMEWINDOW_SIZE) ? _tiledMap.WidthInPixels - GAMEWINDOW_SIZE 
+				: entity.Get<Position>().Value.X;
+
+			pos.Y = (entity.Get<Position>().Value.Y <= GAMEWINDOW_SIZE) ? GAMEWINDOW_SIZE 
+				: (entity.Get<Position>().Value.Y >= _tiledMap.HeightInPixels - GAMEWINDOW_SIZE) ? _tiledMap.HeightInPixels - GAMEWINDOW_SIZE 
+				: entity.Get<Position>().Value.Y;
+
+			_camera.LookAt(pos);
+			
 		}
 	}
 }
