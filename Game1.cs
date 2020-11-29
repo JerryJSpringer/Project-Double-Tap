@@ -75,7 +75,7 @@ namespace GameDevIdiotsProject1
 					new VelocitySystem(_world),
 					new PositionSystem(_world),
 					new AnimationSystem(_world),
-					new CameraSystem(_world, _camera, _tiledMap),
+					new CameraSystem(_world, _camera, _tiledMap, GAME_SIZE),
 					new DrawSystem(_world, _batch, _camera),
 					new DebugSystem(_world, _batch, _camera));
 

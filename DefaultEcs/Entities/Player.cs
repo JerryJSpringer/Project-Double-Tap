@@ -1,8 +1,10 @@
 ﻿using DefaultEcs;
+using GameDevIdiotsProject1.Abilities;
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System;
@@ -77,6 +79,16 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				currentAnimation = "walk-down"
 			});
 
+
+			// Abilities
+			var abilityTable = new Dictionary<string, Ability>();
+			abilityTable[Keys.Space.ToString()] = new DodgeRoll();
+
+			player.Set(new CombatStats
+			{
+				currentAbility = new DefaultAbility(),
+				abilities = abilityTable
+			});
 		}
 	}
 }
