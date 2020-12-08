@@ -16,14 +16,17 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 	{
         #region animation-constants
 
-        private const int WALK_SPRITE_HEIGHT = 80;
-		private const int WALK_SPRITE_WIDTH = 80;
+        private const int WALK_SPRITE_WIDTH = 9;
+		private const int WALK_SPRITE_HEIGHT = 16;
         private const double WALK_FRAME_LENGTH = 0.08;
 
-		#endregion
+        #endregion
 
-		public static void Create(World world, CollisionComponent collisionComponent, Texture2D texture)
+        public static float _scale { get; private set; }
+
+        public static void Create(World world, CollisionComponent collisionComponent, Texture2D texture, float scale = 1f)
 		{
+			_scale = scale;
 			Entity player = world.CreateEntity();
 			player.Set<PlayerInput>(default);
 
@@ -40,14 +43,15 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 			player.Set(new RenderInfo {
 				sprite = texture,
-				bounds = new Rectangle(0, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH),
+				bounds = new Rectangle(0, 0, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT),
 				color = Color.White,
-				flip = false
+				flip = false,
+				scale = _scale
 			});
 
 			// Collision
 			CollisionActorEntity actor = new CollisionActorEntity(
-				new RectangleF(0, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), 
+				new RectangleF(0, 0, 16 * _scale, 16 * _scale), 
 					CollisionActorEntity.CollisionType.PlayerCollision,
 					ref player
 				);
@@ -60,15 +64,12 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 			// CREATE ANIMATIONS
 			Animation walkDown = new Animation();
-			walkDown.AddFrame(new Rectangle(0, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 2, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 3, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 4, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 5, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 6, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 7, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 8, 0, WALK_SPRITE_HEIGHT, WALK_SPRITE_WIDTH), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0, 15, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH, 15, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 2, 15, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 3, 15, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 4, 15, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			//walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 5, 15, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
 
 			// Add to List
 			AnimationTable["walk-down"] = walkDown;
