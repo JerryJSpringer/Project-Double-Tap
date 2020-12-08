@@ -10,5 +10,6 @@ namespace GameDevIdiotsProject1.DefaultEcs.Components
 		public Vector2 position;
 		public Color color;
 		public bool flip;
+		public float scale;
 	}
 }
