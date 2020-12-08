@@ -133,7 +133,7 @@
 /processor:TiledMapTilesetProcessor
 /build:[Base]BaseChip_pipo.tsx
 
-#begin LightShadow_pipo.png
+#begin gamedev.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -143,17 +143,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:LightShadow_pipo.png
-
-#begin LightShadow_pipo.tsx
-/importer:TiledMapTilesetImporter
-/processor:TiledMapTilesetProcessor
-/build:LightShadow_pipo.tsx
-
-#begin samplemap.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:samplemap.tmx
+/build:gamedev.png
 
 #begin gremlin.png
 /importer:TextureImporter
@@ -178,3 +168,26 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:hero.png
+
+#begin LightShadow_pipo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:LightShadow_pipo.png
+
+#begin LightShadow_pipo.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:LightShadow_pipo.tsx
+
+#begin samplemap.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:samplemap.tmx
+

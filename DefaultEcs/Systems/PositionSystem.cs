@@ -23,8 +23,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 			ref Collision collision = ref entity.Get<Collision>();
 
-			renderInfo.position.X = position.X - (renderInfo.bounds.Width / 2);
-			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height / 2);
+			renderInfo.position.X = position.X - (renderInfo.bounds.Width * (renderInfo.scale) / 2);
+			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height * (renderInfo.scale) / 2);
 
 			if (collision.collisionActor.Bounds is RectangleF rectangle)
 			{
