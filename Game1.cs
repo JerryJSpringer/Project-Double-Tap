@@ -76,8 +76,8 @@ namespace GameDevIdiotsProject1
 					new PositionSystem(_world),
 					new AnimationSystem(_world),
 					new CameraSystem(_world, _camera, _tiledMap, GAME_SIZE),
-					new DrawSystem(_world, _batch, _camera),
-					new DebugSystem(_world, _batch, _camera)); 
+					new DrawSystem(_world, _batch, _camera));
+					//new DebugSystem(_world, _batch, _camera)); 
 
 			base.Initialize();
 		}
@@ -92,10 +92,10 @@ namespace GameDevIdiotsProject1
 				Content.Load<Texture2D>("gamedev"),
 				2f);
 
-			Wall.Create(_world,
+			Enemy.Create(_world,
 				_collisionComponent,
 				Content.Load<Texture2D>("gamedev"),
-				3f);
+				4f);
 
 		}
 

@@ -8,3 +8,4 @@
 /.vs/GameDevIdiotsProject1/DesignTimeBuild
 /Content/bin
 /Content/obj
+/bin/Release/netcoreapp3.1/MonoGame.Extended.Collisions.dll

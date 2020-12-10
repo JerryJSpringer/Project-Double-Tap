@@ -7,6 +7,7 @@ namespace GameDevIdiotsProject1.Graphics {
     public class Animation {
         List<AnimationFrame> frames;
         TimeSpan timeIntoAnimation;
+        public bool Loop { get; set; }
 
         // custom Duration accessor, because the length will change whenever a frame is added
         TimeSpan Duration {
@@ -62,12 +63,16 @@ namespace GameDevIdiotsProject1.Graphics {
         }
 
         public void Update(float gameTime) {
+
             double secondsIntoAnimation =
                 timeIntoAnimation.TotalSeconds + gameTime;
 
             double remainder = secondsIntoAnimation % Duration.TotalSeconds;
 
             timeIntoAnimation = TimeSpan.FromSeconds(remainder);
+            
+
+            
         }
     }
 }
