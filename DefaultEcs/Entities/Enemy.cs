@@ -32,7 +32,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				Value = new Vector2(100, 100)
 			});
 
-			enemy.Set(new RenderInfo {
+			enemy.Set(new RenderInfo 
+			{
 				sprite = texture,
 				bounds = new Rectangle(0, 0, 16, 16),
 				color = Color.White,

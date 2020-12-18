@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Components
 {
