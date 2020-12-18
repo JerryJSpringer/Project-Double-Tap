@@ -2,6 +2,7 @@
 using GameDevIdiotsProject1.Abilities;
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Graphics;
+using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -37,6 +38,11 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			_scale = scale;
 			Entity player = world.CreateEntity();
 			player.Set<PlayerInput>(default);
+
+			player.Set(new Aim
+			{
+				Value = new Vector2(0, 0)
+			});
 
 			player.Set(new Position
 			{
@@ -117,17 +123,31 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				currentAnimation = "idle"
 			});
 
-            #endregion
+			#endregion
 
 
-            // Abilities
-            var abilityTable = new Dictionary<string, Ability>();
-			abilityTable[Keys.Space.ToString()] = new DodgeRoll();
+			// Abilities
+			var abilities = new List<Ability>()
+			{
+				new DodgeRoll(new KeyCommand(Keys.Space)),
+				new Gun(new MouseCommand(MouseButton.LEFT_BUTTON)),
+				new Bow(new MouseCommand(MouseButton.RIGHT_BUTTON)),
+				new Movement(new KeyCommand(Keys.W), MovementDirection.UP),
+				new Movement(new KeyCommand(Keys.A), MovementDirection.LEFT),
+				new Movement(new KeyCommand(Keys.S), MovementDirection.DOWN),
+				new Movement(new KeyCommand(Keys.D), MovementDirection.RIGHT),
+				new Dash(new KeyCommand(Keys.W), MovementDirection.UP),
+				new Dash(new KeyCommand(Keys.A), MovementDirection.LEFT),
+				new Dash(new KeyCommand(Keys.S), MovementDirection.DOWN),
+				new Dash(new KeyCommand(Keys.D), MovementDirection.RIGHT),
+				new SpeedBuff(new KeyCommand(Keys.E))
+			};
+			
 
 			player.Set(new CombatStats
 			{
-				currentAbility = new DefaultAbility(),
-				abilities = abilityTable
+				currentAbility = abilities[0],
+				abilities = abilities
 			});
 		}
 	}
