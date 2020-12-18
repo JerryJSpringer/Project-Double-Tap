@@ -8,7 +8,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Components
 		public int maxHealth;
 		public int damage;
 
-		public Dictionary<string, Ability> abilities;
+		public List<Ability> abilities;
 		public Ability currentAbility;
 	}
 }
