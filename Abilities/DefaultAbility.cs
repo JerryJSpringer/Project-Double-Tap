@@ -1,32 +1,34 @@
 ﻿using DefaultEcs;
+using GameDevIdiotsProject1.Util;
 
 namespace GameDevIdiotsProject1.Abilities
 {
-	class DefaultAbility : Ability
+	abstract class DefaultAbility : Ability
 	{
-		public override void Start(in Entity entity, in World world)
+		public DefaultAbility(Command command) : base(command)
 		{
-			currentTime = 0;
-			abilityState = AbilityState.PERFORMING;
 		}
 
-		public override void Update(float state, in Entity entity, in World world)
-		{
-			currentTime += state;
-				
-			if (currentTime > duration)
-			{
-				if (abilityState == AbilityState.COOLDOWN)
-					abilityState = AbilityState.AVAILABLE;
-				else if (abilityState == AbilityState.PERFORMING)
-					End(in entity, in world);
-			}
-		}
-
-		public override void End(in Entity entity, in World world)
+		public override void Start(in Entity entity)
 		{
 			currentTime = 0;
-			abilityState = AbilityState.COOLDOWN;
+			state = AbilityState.PERFORMING;
+		}
+
+		public override void Update(float delta, in Entity entity)
+		{
+			currentTime += delta;
+
+			if (state == AbilityState.COOLDOWN && currentTime > cooldown)
+				state = AbilityState.AVAILABLE;
+			else if (state == AbilityState.PERFORMING && currentTime > duration)
+				End(in entity);
+		}
+
+		public override void End(in Entity entity)
+		{
+			currentTime = 0;
+			state = AbilityState.COOLDOWN;
 		}
 	}
 }
