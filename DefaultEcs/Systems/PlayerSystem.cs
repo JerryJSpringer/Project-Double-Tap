@@ -2,6 +2,7 @@
 using DefaultEcs.System;
 using GameDevIdiotsProject1.Abilities;
 using GameDevIdiotsProject1.DefaultEcs.Components;
+using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,13 +10,11 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
 	public sealed class PlayerSystem : AEntitySystem<float>
 	{
-		private readonly GameWindow _window;
-		private readonly World _world;
-
 		private MouseState _mouseState;
 		private KeyboardState _keyState;
+		private GamePadState _gamePadState;
 
-		public PlayerSystem(GameWindow window, World world)
+		public PlayerSystem(World world)
 			:base(world.GetEntities()
 				.With<PlayerInput>()
 				.With<CombatStats>()
@@ -23,57 +22,57 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 				.With<Velocity>()
 				.AsSet())
 		{
-			_window = window;
-			_world = world;
 		}
 
 		protected override void PreUpdate(float state)
 		{
 			_mouseState = Mouse.GetState();
 			_keyState = Keyboard.GetState();
+			_gamePadState = GamePad.GetState(PlayerIndex.One);
+			Command.Update(_keyState, _mouseState, _gamePadState);
 		}
 
 		protected override void Update(float state, in Entity entity)
 		{
+			// Update aiming
+			ref Aim aim = ref entity.Get<Aim>();
+			Vector2 position = CameraFactory.GetPosition();
+			aim.Value.X = _mouseState.X - position.X;
+			aim.Value.Y = _mouseState.Y - position.Y;
+
+			// Update combat and movement
 			ref Velocity velocity = ref entity.Get<Velocity>();
 			ref CombatStats stats = ref entity.Get<CombatStats>();
 			var abilities = stats.abilities;
 			ref Ability currentAbility = ref stats.currentAbility;
 
-			if (!currentAbility.movementOverride)
+			// Reset movement
+			if ((currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE) && currentAbility.state == AbilityState.COOLDOWN) 
+				|| !(currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE)))
 			{
 				velocity.Value.X = 0;
 				velocity.Value.Y = 0;
-
-				if (_keyState.IsKeyDown(Keys.D))
-					velocity.Value.X += 1;
-				if (_keyState.IsKeyDown(Keys.A))
-					velocity.Value.X -= 1;
-				if (_keyState.IsKeyDown(Keys.W))
-					velocity.Value.Y -= 1;
-				if (_keyState.IsKeyDown(Keys.S))
-					velocity.Value.Y += 1;
 			}
 
-			if (currentAbility.abilityState != AbilityState.PERFORMING)
-			{
-				foreach (Keys key in _keyState.GetPressedKeys())
-				{
-					if (abilities.ContainsKey(key.ToString()))
-					{
-						currentAbility = abilities[key.ToString()];
+			// Update all abilities including cooldowns
+			foreach (Ability ability in abilities)
+				ability.Update(state, in entity);
 
-						if (currentAbility.abilityState == AbilityState.AVAILABLE)
-						{
-							currentAbility.Start(in entity, in _world);
-							break;
-						}
-					}
+			// Check if any abilities should be triggered
+			foreach (Ability ability in abilities)
+			{
+				if (!ability.command.IsPressed() || (ability.state != AbilityState.AVAILABLE && ability.state != AbilityState.ACTIVE))
+					continue;
+
+				// If current ability is over, the ability is instant, or ability can override
+				if (currentAbility.state != AbilityState.PERFORMING
+					|| ability.types.Contains(AbilityType.INSTANT)
+					|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && ability.types.Contains(AbilityType.INTERRUPT)))
+				{
+					ability.Start(in entity);
+					currentAbility = ability;
 				}
 			}
-
-			foreach (Ability ability in abilities.Values)
-				ability.Update(state, in entity, in _world);
 		}
 	}
 }
