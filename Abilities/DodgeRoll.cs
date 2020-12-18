@@ -1,46 +1,44 @@
 ﻿using DefaultEcs;
 using GameDevIdiotsProject1.DefaultEcs.Components;
-using Microsoft.Xna.Framework;
+using GameDevIdiotsProject1.Util;
 
 namespace GameDevIdiotsProject1.Abilities
 {
-	class DodgeRoll : DefaultMovementOverrideAbility
+	class DodgeRoll : DefaultAbility
 	{
 		private const float SPEED_BOOST = 1.8f;
 		private const int COOLDOWN = 200;
 		private const int DURATION = 400;
 		private const string ANIMATION_KEY = "dodge-roll";
 
-		public DodgeRoll()
+		public DodgeRoll(Command command) : base(command)
 		{
 			cooldown = COOLDOWN;
 			duration = DURATION;
+
+			types.AddRange(new AbilityType[]
+			{
+				AbilityType.MOVEMENTOVERRIDE,
+				AbilityType.INTERRUPT
+			});
 		}
 
-		public override void Start(in Entity entity, in World world)
+		public override void Start(in Entity entity)
 		{
-			base.Start(in entity, in world);
-
 			ref Velocity velocity = ref entity.Get<Velocity>();
-			velocity.speed *= SPEED_BOOST;
 
-			if (!velocity.Value.Equals(new Vector2(0, 0))) {
+			if (velocity.Value.X != 0 || velocity.Value.Y != 0) {
+				base.Start(in entity);
+				velocity.speed *= SPEED_BOOST;
+
 				ref Animate animation = ref entity.Get<Animate>();
 				animation.currentAnimation = ANIMATION_KEY;
 			}
-			else {
-				End(in entity, in world);
-            }
 		}
 
-		public override void Update(float state, in Entity entity, in World world)
+		public override void End(in Entity entity)
 		{
-			base.Update(state, in entity, in world);
-		}
-
-		public override void End(in Entity entity, in World world)
-		{
-			base.End(in entity, in world);
+			base.End(in entity);
 
 			ref Velocity velocity = ref entity.Get<Velocity>();
 			velocity.speed /= SPEED_BOOST;
