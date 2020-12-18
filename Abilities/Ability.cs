@@ -1,24 +1,45 @@
 ﻿using DefaultEcs;
+using GameDevIdiotsProject1.Util;
+using System.Collections.Generic;
 
 namespace GameDevIdiotsProject1.Abilities
 {
 	public abstract class Ability
 	{
-		public float currentTime;
-		public float cooldown;
-		public float duration;
-		public bool movementOverride;
-		public AbilityState abilityState;
+		protected float currentTime;
+		protected float cooldown;
+		protected float duration;
+		public Command command;
+		public AbilityState state;
+		public List<AbilityType> types;
 
-		public abstract void Start(in Entity entity, in World world);
-		public abstract void Update(float state, in Entity entity, in World world);
-		public abstract void End(in Entity entity, in World world);
+		public Ability(Command command)
+		{
+			this.command = command;
+			types = new List<AbilityType>();
+			state = AbilityState.AVAILABLE;
+		}
+
+		public abstract void Start(in Entity entity);
+		public abstract void Update(float delta, in Entity entity);
+		public abstract void End(in Entity entity);
 	}
 
 	public enum AbilityState
 	{
-		AVAILABLE = 0,
-		PERFORMING = 1,
-		COOLDOWN = 2
+		AVAILABLE,
+		PERFORMING,
+		CHARGING,
+		COOLDOWN,
+		ACTIVE
+	}
+
+	public enum AbilityType
+	{
+		MOVEMENTOVERRIDE = 1,
+		CHARGE = 2,
+		INTERRUPT = 4,
+		OVERRIDABLE = 8,
+		INSTANT = 16
 	}
 }
