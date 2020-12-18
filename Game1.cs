@@ -2,6 +2,7 @@
 using DefaultEcs.System;
 using GameDevIdiotsProject1.DefaultEcs.Entities;
 using GameDevIdiotsProject1.DefaultEcs.Systems;
+using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -56,28 +57,34 @@ namespace GameDevIdiotsProject1
 
 		protected override void Initialize()
 		{
+			// Set the buffer back width
 			_graphics.PreferredBackBufferHeight = renderSize;
 			_graphics.PreferredBackBufferWidth = renderSize;
 			_graphics.ApplyChanges();
 
+			// Init camera factory
+			CameraFactory.Init();
+
+			// Update graphics devices
 			_batch = new SpriteBatch(GraphicsDevice);
 			_renderTarget = new RenderTarget2D(GraphicsDevice, GAME_SIZE, GAME_SIZE);
-
-			_world = new World(1000);
 
 			//load tiledmap resources
 			_tiledMap = Content.Load<TiledMap>("samplemap");
 			_tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
 			_camera = new OrthographicCamera(GraphicsDevice);
 
+			// Set up world and systems
+			_world = new World(1000);
+
 			_system = new SequentialSystem<float>(
-					new PlayerSystem(Window, _world),
+					new PlayerSystem(_world),
 					new VelocitySystem(_world),
 					new PositionSystem(_world),
 					new AnimationSystem(_world),
-					new CameraSystem(_world, _camera, _tiledMap, GAME_SIZE),
-					new DrawSystem(_world, _batch, _camera));
-					//new DebugSystem(_world, _batch, _camera)); 
+					new CameraSystem(_world, _camera, _tiledMap, Window, GAME_SIZE),
+					new DrawSystem(_world, _batch, _camera),
+					new DebugSystem(_world, _batch, _camera)); 
 
 			base.Initialize();
 		}
@@ -97,6 +104,7 @@ namespace GameDevIdiotsProject1
 				Content.Load<Texture2D>("gamedev"),
 				4f);
 
+			BulletFactory.Init(_world, _collisionComponent, Content.Load<Texture2D>("gamedev"), 2f);
 		}
 
 		#region game

@@ -31,7 +31,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 
 				//attempt to retrieve CombatStats component on entity
 				try {
-					abilityState = entity.Get<CombatStats>().currentAbility.abilityState;
+					abilityState = entity.Get<CombatStats>().currentAbility.state;
 					if (abilityState != AbilityState.PERFORMING)
 						// update animation
 						if (velInfo.Value.Equals(new Vector2(0, 0)))
