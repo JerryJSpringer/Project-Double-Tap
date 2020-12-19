@@ -6,22 +6,22 @@ namespace GameDevIdiotsProject1.Abilities
 	abstract class DoubleTapAbility : DefaultAbility
 	{
 		private const float DEFAULT_MAX_WINDOW = 200;
-		private float maxWindow;
+		private readonly float _maxWindow;
 		private bool _released;
 		
-		public DoubleTapAbility(Command command) : base (command)
+		public DoubleTapAbility(Command command, float maxWindow = DEFAULT_MAX_WINDOW) : base (command)
 		{
-			maxWindow = DEFAULT_MAX_WINDOW;
+			_maxWindow = maxWindow;
 		}
 
 		public override void Start(in Entity entity)
 		{
-			if (state == AbilityState.AVAILABLE && currentTime < maxWindow)
+			if (state == AbilityState.AVAILABLE && currentTime < _maxWindow)
 			{
 				if (_released)
 					Action(in entity);
 			} 
-			else if (currentTime > maxWindow)
+			else if (currentTime > _maxWindow)
 			{
 				_released = false;
 				currentTime = 0;

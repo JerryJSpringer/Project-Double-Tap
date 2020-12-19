@@ -5,6 +5,7 @@ using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
