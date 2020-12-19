@@ -7,9 +7,9 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class Bow : ChargeAbility
 	{
-		private const int COOLDOWN = 200;
-		private const int MAX_CHARGE = 500;
-		private const int MAX_MULTI = 4;
+		private const float COOLDOWN = 200;
+		private const float MAX_CHARGE = 500;
+		private const float MAX_MULTI = 4;
 		private const float BULLET_SPEED = .25f;
 
 		public Bow(Command command) : base(command)

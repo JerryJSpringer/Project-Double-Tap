@@ -6,7 +6,7 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class SpeedBuff : ToggleAbility
 	{
-		private const float SPEED_BUFF = 2f;
+		private const float SPEED_BUFF = 1.5f;
 
 		public SpeedBuff(Command command) : base (command)
 		{

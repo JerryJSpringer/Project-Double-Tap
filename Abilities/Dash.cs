@@ -10,8 +10,8 @@ namespace GameDevIdiotsProject1.Abilities
 		private const float COOLDOWN = 500;
 		private const float DURATION = 100;
 		private const float DASH_DISTANCE = 30;
-		private float _distance;
-		private MovementDirection _direction;
+		private readonly float _distance;
+		private readonly MovementDirection _direction;
 
 		public Dash(Command command, MovementDirection direction) : base (command)
 		{

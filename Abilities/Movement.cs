@@ -2,17 +2,25 @@
 using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace GameDevIdiotsProject1.Abilities
 {
 	class Movement : Ability
 	{
+		private static Dictionary<MovementDirection, bool> movements;
+		private const string ANIMATION_KEY = "walk";
 		private const float DELAY = 70;
-		private readonly MovementDirection _direction;
+		internal readonly MovementDirection _direction;
 
 		public Movement(Command command, MovementDirection direction) : base(command)
 		{
 			_direction = direction;
+			updateAnimation = ANIMATION_KEY;
+			endAnimation = DEFAULT_IDLE_ANIMATION;
+
+			if (movements == null)
+				movements = new Dictionary<MovementDirection, bool>();
 		}
 
 		public override void Start(in Entity entity)
@@ -21,6 +29,8 @@ namespace GameDevIdiotsProject1.Abilities
 
 		public override void Update(float delta, in Entity entity)
 		{
+			ref Animate animation = ref entity.Get<Animate>();
+
 			currentTime += delta;
 
 			CombatStats stats = entity.Get<CombatStats>();
@@ -33,10 +43,16 @@ namespace GameDevIdiotsProject1.Abilities
 			if (!command.IsPressed())
 			{
 				if (currentTime > DELAY)
+				{
 					value = 0;
-			} else
+					movements[_direction] = false;
+				}
+			} 
+			else
 			{
 				currentTime = 0;
+				if (CheckAnimationOverride(animation.currentAnimation))
+					movements[_direction] = true;
 			}
 
 			switch (_direction)
@@ -54,6 +70,21 @@ namespace GameDevIdiotsProject1.Abilities
 					velocity.Y += value;
 					break;
 			}
+
+			bool isMoving = false;
+			foreach (bool movement in movements.Values)
+				if (movement)
+					isMoving = true;
+
+			if (isMoving && CheckAnimationOverride(animation.currentAnimation))
+				animation.currentAnimation = updateAnimation;
+			else if (animation.currentAnimation == ANIMATION_KEY)
+				animation.currentAnimation = endAnimation;
+		}
+
+		private bool CheckAnimationOverride(string currentAnimation)
+		{
+			return currentAnimation == DEFAULT_IDLE_ANIMATION || currentAnimation == ANIMATION_KEY;
 		}
 
 		public override void End(in Entity entity)

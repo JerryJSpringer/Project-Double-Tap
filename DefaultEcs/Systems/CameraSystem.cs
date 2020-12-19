@@ -5,6 +5,7 @@ using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
@@ -14,9 +15,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 		private readonly int _center;
         private readonly OrthographicCamera _camera;
 		private readonly TiledMap _tiledMap;
-		private readonly GameWindow _window;
+		private readonly BoxingViewportAdapter _viewportAdapter;
 
-		public CameraSystem(World world, OrthographicCamera camera, TiledMap tiledMap, GameWindow window, int gamesize) :
+		public CameraSystem(World world, OrthographicCamera camera, TiledMap tiledMap, BoxingViewportAdapter viewportAdapter, int gamesize) :
 			base(world.GetEntities()
 				.With<PlayerInput>()
 				.With<RenderInfo>()
@@ -24,7 +25,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 		{
 			_camera = camera;
 			_tiledMap = tiledMap;
-			_window = window;
+			_viewportAdapter = viewportAdapter;
 			_center = gamesize / 2;
 		}
 
@@ -43,19 +44,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 				: charPosition.Y
 			};
 
-			int width = _window.ClientBounds.Width / 2;
-			int height = _window.ClientBounds.Height / 2;
-
-			CameraFactory.Update(new Vector2
-			{
-				X = (charPosition.X <= width) ? charPosition.X
-				: (charPosition.X >= _tiledMap.WidthInPixels - width) ? charPosition.X - _tiledMap.WidthInPixels + 2 * width
-				: width,
-
-				Y = (charPosition.Y <= height) ? charPosition.Y
-				: (charPosition.Y >= _tiledMap.HeightInPixels - height) ? charPosition.Y - _tiledMap.HeightInPixels + 2 * height
-				: height
-			});
+			CameraFactory.Update(Vector2.Transform(charPosition, _camera.GetViewMatrix()) 
+				+ new Vector2(_viewportAdapter.Viewport.X, _viewportAdapter.Viewport.Y));
 
 			_camera.LookAt(cameraPosition);
 			
