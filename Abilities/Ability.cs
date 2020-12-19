@@ -1,4 +1,5 @@
 ﻿using DefaultEcs;
+using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Util;
 using System.Collections.Generic;
 
@@ -6,9 +7,14 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	public abstract class Ability
 	{
+		protected const string DEFAULT_IDLE_ANIMATION = "idle";
 		protected float currentTime;
+		protected float startup;
 		protected float cooldown;
 		protected float duration;
+		protected string startAnimation;
+		protected string updateAnimation;
+		protected string endAnimation;
 		public Command command;
 		public AbilityState state;
 		public List<AbilityType> types;
@@ -31,7 +37,8 @@ namespace GameDevIdiotsProject1.Abilities
 		PERFORMING,
 		CHARGING,
 		COOLDOWN,
-		ACTIVE
+		ACTIVE,
+		STARTING
 	}
 
 	public enum AbilityType
