@@ -8,9 +8,7 @@ namespace GameDevIdiotsProject1.Abilities
 		protected float maxMulti;
 		protected float multi;
 
-		public ChargeAbility(Command command) : base (command)
-		{
-		}
+		public ChargeAbility(Command command) : base (command) { }
 
 		public override void Start(in Entity entity)
 		{
