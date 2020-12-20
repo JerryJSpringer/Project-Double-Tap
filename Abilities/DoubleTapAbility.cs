@@ -5,8 +5,16 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	abstract class DoubleTapAbility : DefaultAbility
 	{
+		/// <summary>
+        /// Default time between consecutive key presses. Applied when not specified in constructor.
+        /// </summary>
 		private const float DEFAULT_MAX_WINDOW = 200;
+
+		/// <summary>
+		/// Maximum amount of time allowed between consecutive key presses
+		/// </summary>
 		private readonly float _maxWindow;
+
 		private bool _released;
 		
 		public DoubleTapAbility(Command command, float maxWindow = DEFAULT_MAX_WINDOW) : base (command)
@@ -16,11 +24,12 @@ namespace GameDevIdiotsProject1.Abilities
 
 		public override void Start(in Entity entity)
 		{
+			
 			if (state == AbilityState.AVAILABLE && currentTime < _maxWindow)
 			{
 				if (_released)
 					Action(in entity);
-			} 
+			}
 			else if (currentTime > _maxWindow)
 			{
 				_released = false;

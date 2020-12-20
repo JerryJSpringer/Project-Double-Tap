@@ -44,11 +44,14 @@ namespace GameDevIdiotsProject1.Abilities
 		{
 			currentTime = 0;
 			state = AbilityState.COOLDOWN;
+			ref Animate animate= ref entity.Get<Animate>();
+
+			//reset the current animation to first frame to prevent weird animation looping
+			animate.AnimationList[animate.currentAnimation].Reset();
 
 			if (endAnimation != null)
 			{
-				ref string animation = ref entity.Get<Animate>().currentAnimation;
-				animation = endAnimation;
+				animate.currentAnimation = endAnimation;
 			}
 		}
 	}

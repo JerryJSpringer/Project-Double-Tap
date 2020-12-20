@@ -62,14 +62,19 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			// Check if any abilities should be triggered
 			foreach (Ability ability in abilities)
 			{
+				//skip if the command attached to the ability is not pressed, or the
+				//ability is not available AND not currently active (is this essentially "if in Cooldown?")
 				if (!ability.command.IsPressed() || (ability.state != AbilityState.AVAILABLE && ability.state != AbilityState.ACTIVE))
 					continue;
 
+				Console.WriteLine(currentAbility.state);
 				// If current ability is over, the ability is instant, or ability can override
-				if (currentAbility.state != AbilityState.PERFORMING
-					|| ability.types.Contains(AbilityType.INSTANT)
-					|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && ability.types.Contains(AbilityType.INTERRUPT)))
+				if ((currentAbility.state != AbilityState.PERFORMING
+					&& currentAbility.state != AbilityState.STARTING)
+					|| (ability.types.Contains(AbilityType.INSTANT)
+					|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && ability.types.Contains(AbilityType.INTERRUPT))))
 				{
+					Console.WriteLine(currentAbility);
 					ability.Start(in entity);
 					currentAbility = ability;
 				}
