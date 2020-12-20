@@ -11,7 +11,7 @@ namespace GameDevIdiotsProject1.Abilities
 		protected float currentTime;
 		protected float startup;
 		protected float cooldown;
-		protected float duration;
+		public float duration { get; protected set; }
 		protected string startAnimation;
 		protected string updateAnimation;
 		protected string endAnimation;
