@@ -10,7 +10,27 @@ using System.Collections.Generic;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Entities
 {
-	public static class Enemy
+	public static class EnemyFactory
+	{
+		private static Enemy _enemy;
+
+		public static void Init(World world, CollisionComponent collisionComponent, Texture2D texture, float scale = 1f)
+		{
+			_enemy = new Enemy(world, collisionComponent, texture, scale);
+		}
+
+		public static void Create(Vector2 position)
+		{
+			_enemy.Create(ref position);
+		}
+
+		public static void Dispose()
+		{
+			_enemy.Dispose();
+		}
+	}
+
+	internal class Enemy : EntityFactory
 	{
 		#region animation-constants
 
@@ -20,33 +40,36 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 		#endregion
 
-		public static float _scale { get; private set; }
+		internal Enemy(World world, CollisionComponent collisionComponent, Texture2D texture, float scale)
+			: base(world, collisionComponent, texture, scale) { }
 
-		public static void Create(World world, CollisionComponent collisionComponent, Texture2D texture, float scale = 1f)
+		internal void Create(ref Vector2 position)
 		{
-			_scale = scale;
-			Entity enemy = world.CreateEntity();
+			Entity enemy = _world.CreateEntity();
 
+			// Position
 			enemy.Set(new Position
 			{
 				Value = new Vector2(100, 100)
 			});
 
-			enemy.Set(new RenderInfo 
+			// Render info
+			enemy.Set(new RenderInfo
 			{
-				sprite = texture,
+				sprite = _texture,
 				bounds = new Rectangle(0, 0, 16, 16),
 				color = Color.White,
 				flip = false,
 				scale = _scale
 			});
-
+			
+			// Collision
 			CollisionActorEntity actor = new CollisionActorEntity(
 				new CircleF(new Point2(), 8 * _scale),
 				CollisionActorEntity.CollisionType.MonsterCollision,
 				ref enemy);
 			enemy.Set(new Collision(actor));
-			collisionComponent.Insert(actor);
+			_collisionComponent.Insert(actor);
 
 			#region create-animations
 			// Animations
@@ -56,12 +79,13 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			Animation idle = new Animation();
 			idle.AddFrame(new Rectangle(0, 0, IDLE_SPRITE_WIDTH, IDLE_SPRITE_HEIGHT), TimeSpan.FromSeconds(IDLE_FRAME_LENGTH));
 			idle.AddFrame(new Rectangle(IDLE_SPRITE_WIDTH, 0, IDLE_SPRITE_WIDTH, IDLE_SPRITE_HEIGHT), TimeSpan.FromSeconds(IDLE_FRAME_LENGTH));
-			
+
 			//add to list
 			AnimationTable["idle"] = idle;
 
 			//set animations
-			enemy.Set(new Animate {
+			enemy.Set(new Animate
+			{
 				AnimationList = AnimationTable,
 				currentAnimation = "idle"
 			});

@@ -20,14 +20,17 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 		{
 			_bullet.Create(position, direction, speed);
 		}
+
+		public static void Dispose()
+		{
+			_bullet.Dispose();
+		}
 	}
 
 	internal class Bullet : EntityFactory
 	{
 		internal Bullet(World world, CollisionComponent collisionComponent, Texture2D texture, float scale) 
-			: base(world, collisionComponent, texture, scale)
-		{
-		}
+			: base(world, collisionComponent, texture, scale) { }
 
 		internal void Create(Vector2 position, Vector2 direction, float speed)
 		{

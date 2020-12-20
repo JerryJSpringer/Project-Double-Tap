@@ -13,13 +13,35 @@ using System.Collections.Generic;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Entities
 {
-	public static class Player
+	public static class PlayerFactory
 	{
-        #region animation-constants
+		private static Player _player;
 
-        private const int WALK_SPRITE_WIDTH = 16;
+		public static float _scale;
+
+		public static void Init(World world, CollisionComponent collisionComponent, Texture2D texture, float scale = 1f)
+		{
+			_player = new Player(world, collisionComponent, texture, scale);
+		}
+
+        public static void Create(Vector2 position)
+		{
+			_player.Create(ref position);
+		}
+
+		public static void Dispose()
+		{
+			_player.Dispose();
+		}
+	}
+
+	internal class Player : EntityFactory
+	{
+		#region animation-constants
+
+		private const int WALK_SPRITE_WIDTH = 16;
 		private const int WALK_SPRITE_HEIGHT = 16;
-        private const double WALK_FRAME_LENGTH = 0.1;
+		private const double WALK_FRAME_LENGTH = 0.1;
 
 		private const int DODGE_SPRITE_WIDTH = 16;
 		private const int DODGE_SPRITE_HEIGHT = 16;
@@ -31,12 +53,12 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 		#endregion
 
-		public static float _scale { get; private set; }
+		internal Player(World world, CollisionComponent collisionComponent, Texture2D texture, float scale)
+			: base(world, collisionComponent, texture, scale) { }
 
-        public static void Create(World world, CollisionComponent collisionComponent, Texture2D texture, float scale = 1f)
+		internal void Create(ref Vector2 position)
 		{
-			_scale = scale;
-			Entity player = world.CreateEntity();
+			Entity player = _world.CreateEntity();
 			player.Set<PlayerInput>(default);
 
 			player.Set(new Aim
@@ -46,7 +68,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 			player.Set(new Position
 			{
-				Value = new Vector2(0, 0)
+				Value = position
 			});
 
 			player.Set(new Velocity
@@ -55,8 +77,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				speed = .2f
 			});
 
-			player.Set(new RenderInfo {
-				sprite = texture,
+			player.Set(new RenderInfo
+			{
+				sprite = _texture,
 				bounds = new Rectangle(0, 0, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT),
 				color = Color.White,
 				flip = false,
@@ -65,12 +88,12 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 
 			// Collision
 			CollisionActorEntity actor = new CollisionActorEntity(
-				new RectangleF(0, 0, 16 * _scale, 16 * _scale), 
+				new RectangleF(0, 0, 16 * _scale, 16 * _scale),
 					CollisionActorEntity.CollisionType.PlayerCollision,
 					ref player
 				);
 			player.Set(new Collision(actor));
-			collisionComponent.Insert(actor);
+			_collisionComponent.Insert(actor);
 
 
 			// Abilities
@@ -90,6 +113,12 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				new SpeedBuff(new KeyCommand(Keys.E))
 			};
 
+			player.Set(new CombatStats
+			{
+				currentAbility = abilities[0],
+				abilities = abilities
+			});
+
 			#region create-animations
 			// Animations
 			var AnimationTable = new Dictionary<string, Animation>();
@@ -97,14 +126,14 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			// CREATE ANIMATIONS (should probably make a function that automates this)
 			Animation walkDown = new Animation();
 			walkDown.AddFrame(new Rectangle(0, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 2, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 3, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 4, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
-			walkDown.AddFrame(new Rectangle(0 + WALK_SPRITE_WIDTH * 5, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH * 2, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH * 3, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH * 4, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
+			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH * 5, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
 
 			// Dodge Roll Animation
-			Animation dodgeRoll = new Animation(DodgeRoll.GetDuration());
+			Animation dodgeRoll = new Animation(DodgeRoll.DURATION);
 			//dodgeRoll.AddFrame(new Rectangle(0, 32, DODGE_SPRITE_WIDTH, DODGE_SPRITE_WIDTH), TimeSpan.FromSeconds(DODGE_FRAME_LENGTH));
 			//dodgeRoll.AddFrame(new Rectangle(DODGE_SPRITE_WIDTH, 32, DODGE_SPRITE_WIDTH, DODGE_SPRITE_HEIGHT), TimeSpan.FromSeconds(DODGE_FRAME_LENGTH));
 			dodgeRoll.AddFrame(new Rectangle(DODGE_SPRITE_WIDTH * 2, 32, DODGE_SPRITE_WIDTH, DODGE_SPRITE_HEIGHT));
@@ -138,15 +167,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 				AnimationList = AnimationTable,
 				currentAnimation = "idle"
 			});
-
 			#endregion
-
-
-			player.Set(new CombatStats
-			{
-				currentAbility = abilities[0],
-				abilities = abilities
-			});
 		}
 	}
 }
