@@ -9,9 +9,9 @@ namespace GameDevIdiotsProject1.Abilities
 	class Movement : Ability
 	{
 		private static Dictionary<MovementDirection, bool> movements;
-		private const string ANIMATION_KEY = "walk";
-		private const float DELAY = 70;
-		internal readonly MovementDirection _direction;
+		public static readonly string ANIMATION_KEY = "walk";
+		public static readonly float DELAY = 70;
+		private readonly MovementDirection _direction;
 
 		public Movement(Command command, MovementDirection direction) : base(command)
 		{
@@ -23,9 +23,7 @@ namespace GameDevIdiotsProject1.Abilities
 				movements = new Dictionary<MovementDirection, bool>();
 		}
 
-		public override void Start(in Entity entity)
-		{
-		}
+		public override void Start(in Entity entity) { }
 
 		public override void Update(float delta, in Entity entity)
 		{
@@ -87,8 +85,6 @@ namespace GameDevIdiotsProject1.Abilities
 			return currentAnimation == DEFAULT_IDLE_ANIMATION || currentAnimation == ANIMATION_KEY;
 		}
 
-		public override void End(in Entity entity)
-		{
-		}
+		public override void End(in Entity entity) { }
 	}
 }
