@@ -6,10 +6,10 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class DodgeRoll : DefaultAbility
 	{
-		private const float SPEED_BOOST = 1.8f;
-		private const float COOLDOWN = 200;
-		private static float DURATION = 400;
-		private const string ANIMATION_KEY = "dodge-roll";
+		public static readonly float SPEED_BOOST = 1.8f;
+		public static readonly float COOLDOWN = 200;
+		public static readonly float DURATION = 400;
+		public static readonly string ANIMATION_KEY = "dodge-roll";
 
 		public DodgeRoll(Command command) : base(command)
 		{
@@ -43,10 +43,5 @@ namespace GameDevIdiotsProject1.Abilities
 			ref Velocity velocity = ref entity.Get<Velocity>();
 			velocity.speed /= SPEED_BOOST;
 		}
-
-		public static float GetDuration()
-        {
-			return DURATION;
-        }
 	}
 }

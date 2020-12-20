@@ -13,11 +13,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 				.With<Position>()
 				.With<RenderInfo>()
 				.With<Collision>()
-				.AsSet())
-		{
-		}
+				.AsSet()) { }
 
-		protected override void Update(float state, in Entity entity)
+		protected override void Update(float delta, in Entity entity)
 		{
 			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();

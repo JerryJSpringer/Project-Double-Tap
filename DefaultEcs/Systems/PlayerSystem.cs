@@ -5,7 +5,6 @@ using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
@@ -21,11 +20,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 				.With<CombatStats>()
 				.With<Position>()
 				.With<Velocity>()
-				.AsSet())
-		{
-		}
+				.AsSet()) { }
 
-		protected override void PreUpdate(float state)
+		protected override void PreUpdate(float delta)
 		{
 			_mouseState = Mouse.GetState();
 			_keyState = Keyboard.GetState();
@@ -33,7 +30,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Command.Update(_keyState, _mouseState, _gamePadState);
 		}
 
-		protected override void Update(float state, in Entity entity)
+		protected override void Update(float delta, in Entity entity)
 		{
 			// Update aiming
 			ref Aim aim = ref entity.Get<Aim>();
@@ -57,24 +54,21 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 			// Update all abilities including cooldowns
 			foreach (Ability ability in abilities)
-				ability.Update(state, in entity);
+				ability.Update(delta, in entity);
 
 			// Check if any abilities should be triggered
 			foreach (Ability ability in abilities)
 			{
-				//skip if the command attached to the ability is not pressed, or the
-				//ability is not available AND not currently active (is this essentially "if in Cooldown?")
+				// Do not start if ability is not pressed or if not available
 				if (!ability.command.IsPressed() || (ability.state != AbilityState.AVAILABLE && ability.state != AbilityState.ACTIVE))
 					continue;
 
-				Console.WriteLine(currentAbility.state);
 				// If current ability is over, the ability is instant, or ability can override
 				if ((currentAbility.state != AbilityState.PERFORMING
 					&& currentAbility.state != AbilityState.STARTING)
 					|| (ability.types.Contains(AbilityType.INSTANT)
 					|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && ability.types.Contains(AbilityType.INTERRUPT))))
 				{
-					Console.WriteLine(currentAbility);
 					ability.Start(in entity);
 					currentAbility = ability;
 				}

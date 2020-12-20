@@ -11,11 +11,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			:base(world.GetEntities()
 				 .With<Velocity>()
 				 .With<Position>()
-				 .AsSet())
-		{
-		}
+				 .AsSet()) { }
 
-		protected override void Update(float state, in Entity entity)
+		protected override void Update(float delta, in Entity entity)
 		{
 			ref Velocity velocity = ref entity.Get<Velocity>();
 			ref Position position = ref entity.Get<Position>();
@@ -23,11 +21,13 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Vector2 dir = velocity.Value;
 			float speed = velocity.speed;
 
+			// Get unit direction vector if non-zero
 			if (dir.X != 0 || dir.Y != 0)
 				dir.Normalize();
 
-			position.Value.X += dir.X * speed * state;
-			position.Value.Y += dir.Y * speed * state;
+			// Position * direction * delta
+			position.Value.X += dir.X * speed * delta;
+			position.Value.Y += dir.Y * speed * delta;
 		}
 	}
 }

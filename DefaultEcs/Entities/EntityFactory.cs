@@ -18,5 +18,10 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			_texture = texture;
 			_scale = scale;
 		}
+
+		public void Dispose()
+		{
+			_texture.Dispose();
+		}
 	}
 }

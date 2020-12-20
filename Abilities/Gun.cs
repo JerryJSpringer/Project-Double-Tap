@@ -7,9 +7,9 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class Gun : DefaultAbility
 	{
-		private const float COOLDOWN = 200;
-		private const float DURATION = 0;
-		private const float BULLET_SPEED = .5f;
+		public static readonly float COOLDOWN = 200;
+		public static readonly float DURATION = 0;
+		public static readonly float BULLET_SPEED = .5f;
 
 		public Gun(Command command) : base(command)
 		{

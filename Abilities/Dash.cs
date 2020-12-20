@@ -7,9 +7,9 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class Dash : DoubleTapAbility
 	{
-		private const float COOLDOWN = 500;
-		private const float DURATION = 100;
-		private const float DASH_DISTANCE = 30;
+		public static readonly float COOLDOWN = 500;
+		public static readonly float DURATION = 100;
+		public static readonly float DASH_DISTANCE = 30;
 		private readonly float _distance;
 		private readonly MovementDirection _direction;
 

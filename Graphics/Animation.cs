@@ -1,25 +1,22 @@
-﻿using GameDevIdiotsProject1.Abilities;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GameDevIdiotsProject1.Graphics {
-    public class Animation {
-        List<AnimationFrame> frames;
-        TimeSpan timeIntoAnimation;
-        float abilityDuration;
+namespace GameDevIdiotsProject1.Graphics
+{
+	public class Animation {
+        private readonly List<AnimationFrame> frames;
+        private TimeSpan timeIntoAnimation;
+        private float _abilityDuration;
 
-        //specify default constructor
-        public Animation() { }
-        //constructor for ability animations
-        public Animation(float abilityDuration)
+        public Animation(float abilityDuration = 0)
         {
-            this.abilityDuration = abilityDuration;
+            _abilityDuration = abilityDuration;
+            frames = new List<AnimationFrame>();
         }
 
-        // custom Duration accessor, because the length will change whenever a frame is added
-        TimeSpan Duration {
+        public TimeSpan Duration {
             get {
                 double totalSeconds = 0;
                 foreach (var frame in frames) {
@@ -59,19 +56,34 @@ namespace GameDevIdiotsProject1.Graphics {
             }
         }
 
+        public void AddFrame(Rectangle rectangle, TimeSpan duration)
+        {
+            //if attempting to use on an Ability Animation, redirect to Ability AddFrame
+            if (_abilityDuration != 0)
+            {
+                AddFrame(rectangle);
+                return;
+            }
+
+            AnimationFrame newFrame = new AnimationFrame()
+            {
+                SourceRectangle = rectangle,
+                Duration = duration
+            };
+
+            frames.Add(newFrame);
+        }
+
         public void AddFrame(Rectangle rectangle)
         {
             //default TimeSpan
             TimeSpan duration = TimeSpan.FromSeconds(.05);
 
-            if (frames == null)
-                frames = new List<AnimationFrame>();
-
             //check if this animation is linked to an ability
-            if (abilityDuration != 0)
+            if (_abilityDuration != 0)
             {
                 //update frame length automatically
-                duration = TimeSpan.FromSeconds((abilityDuration/(frames.Count+1))/1000);
+                duration = TimeSpan.FromSeconds((_abilityDuration/(frames.Count+1))/1000);
 
                 //iterate through existing frames, update with new frame length
                 foreach (AnimationFrame frame in frames)
@@ -89,36 +101,16 @@ namespace GameDevIdiotsProject1.Graphics {
             frames.Add(newFrame);
         }
 
-        public void AddFrame(Rectangle rectangle, TimeSpan duration)
+        public void Update(float gameTime) 
         {
-            if (frames == null)
-                frames = new List<AnimationFrame>();
-
-            //if attempting to use on an Ability Animation, redirect to Ability AddFrame
-            if (abilityDuration != 0)
-            {
-                AddFrame(rectangle);
-                return;
-            }
-
-            AnimationFrame newFrame = new AnimationFrame()
-            {
-                SourceRectangle = rectangle,
-                Duration = duration
-            };
-
-            frames.Add(newFrame);
-        }
-
-        public void Update(float gameTime) {
-
             double secondsIntoAnimation =
                 timeIntoAnimation.TotalSeconds + gameTime;
 
-            double remainder = secondsIntoAnimation % Duration.TotalSeconds;
-
+            double remainder;
             if (secondsIntoAnimation > Duration.TotalSeconds)
                 remainder = 0;
+            else
+                remainder = secondsIntoAnimation % Duration.TotalSeconds;
 
             timeIntoAnimation = TimeSpan.FromSeconds(remainder);
         }

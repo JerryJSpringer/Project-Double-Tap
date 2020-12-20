@@ -6,9 +6,7 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	abstract class DefaultAbility : Ability
 	{
-		public DefaultAbility(Command command) : base(command)
-		{
-		}
+		public DefaultAbility(Command command) : base(command) { }
 
 		public override void Start(in Entity entity)
 		{

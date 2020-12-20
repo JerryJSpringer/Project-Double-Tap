@@ -20,12 +20,12 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			_camera = camera;
 		}
 
-		protected override void PreUpdate(float state)
+		protected override void PreUpdate(float delta)
 		{
-			_batch.Begin(transformMatrix: _camera.GetViewMatrix());
+			_batch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
 		}
 
-		protected override void Update(float state, ref Collision component)
+		protected override void Update(float delta, ref Collision component)
 		{
 			if (component.collisionActor.Bounds is RectangleF rectangle)
 				_batch.DrawRectangle(rectangle, Color.Red, 3, 1);
@@ -33,7 +33,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 				_batch.DrawCircle(circle, 10, Color.Red, 3, 1);
 		}
 
-		protected override void PostUpdate(float state)
+		protected override void PostUpdate(float delta)
 		{
 			_batch.End();
 		}

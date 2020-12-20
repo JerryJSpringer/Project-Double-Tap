@@ -29,7 +29,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			_center = gamesize / 2;
 		}
 
-		protected override void Update(float state, in Entity entity)
+		protected override void Update(float delta, in Entity entity)
 		{
 			Vector2 charPosition = entity.Get<Position>().Value;
 
