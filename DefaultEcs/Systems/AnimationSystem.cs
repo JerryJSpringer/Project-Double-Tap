@@ -8,10 +8,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 			: base(world.GetEntities()
 				.With<Animate>()
 				.With<RenderInfo>()
-				.AsSet()) {
-		}
+				.AsSet()) { }
 
-		protected override void Update(float state, in Entity entity) {
+		protected override void Update(float delta, in Entity entity) {
 
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 			ref Animate animateInfo = ref entity.Get<Animate>();
@@ -29,7 +28,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems {
 			}
 
 			Animation currentAnimation = animateInfo.AnimationList[animateInfo.currentAnimation];
-			currentAnimation.Update(state / 1000);
+			currentAnimation.Update(delta / 1000);
 
 			// Update renderInfo
 			renderInfo.bounds = currentAnimation.CurrentRectangle;

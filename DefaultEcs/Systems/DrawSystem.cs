@@ -19,17 +19,17 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			_camera = camera;
 		}
 
-		protected override void PreUpdate(float state)
+		protected override void PreUpdate(float delta)
 		{
 			_batch.Begin(transformMatrix: _camera.GetViewMatrix(), samplerState: SamplerState.PointClamp);
 		}
 
-		protected override void Update(float state, ref RenderInfo component)
+		protected override void Update(float delta, ref RenderInfo component)
 		{
 			_batch.Draw(component.sprite, component.position, component.bounds, component.color, 0f, new Vector2(0,0), component.scale, (component.flip) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
 		}
 
-		protected override void PostUpdate(float state)
+		protected override void PostUpdate(float delta)
 		{
 			_batch.End();
 		}
