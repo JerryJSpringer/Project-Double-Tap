@@ -81,15 +81,11 @@ namespace GameDevIdiotsProject1
 			_collisionComponent = new CollisionComponent(
 				new RectangleF(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels));
 
-			Player.Create(_world, 
-				_collisionComponent,
-				Content.Load<Texture2D>("gamedev"),
-				2f);
+			PlayerFactory.Init(_world, _collisionComponent, Content.Load<Texture2D>("gamedev"), 2f);
+			PlayerFactory.Create(new Vector2());
 
-			Enemy.Create(_world,
-				_collisionComponent,
-				Content.Load<Texture2D>("gamedev"),
-				4f);
+			EnemyFactory.Init(_world, _collisionComponent, Content.Load<Texture2D>("gamedev"), 4f);
+			EnemyFactory.Create(new Vector2(100, 100));
 
 			BulletFactory.Init(_world, _collisionComponent, Content.Load<Texture2D>("gamedev"), 2f);
 		}
@@ -109,15 +105,24 @@ namespace GameDevIdiotsProject1
 			// Update collision
 			_collisionComponent.Update(gameTime);
 
+			// Base call
 			base.Update(gameTime);
 		}
 
 		protected override void Dispose(bool disposing)
 		{
+			// Instance systems
 			_world.Dispose();
 			_system.Dispose();
 			_batch.Dispose();
 			_graphics.Dispose();
+
+			// Factories
+			PlayerFactory.Dispose();
+			EnemyFactory.Dispose();
+			BulletFactory.Dispose();
+
+			// Base call
 			base.Dispose(disposing);
 		}
 	}
