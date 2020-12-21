@@ -10,7 +10,7 @@ namespace GameDevIdiotsProject1.Abilities
 	{
 		private static Dictionary<MovementDirection, bool> movements;
 		public static readonly string ANIMATION_KEY = "walk";
-		public static readonly float DELAY = 70;
+		public static readonly float DELAY = 100;
 		private readonly MovementDirection _direction;
 
 		public Movement(Command command, MovementDirection direction) : base(command)
@@ -21,9 +21,26 @@ namespace GameDevIdiotsProject1.Abilities
 
 			if (movements == null)
 				movements = new Dictionary<MovementDirection, bool>();
+
+			movements[_direction] = false;
+		}
+		public static void ResetMovement(in Entity entity)
+		{
+			Ability currentAbility = entity.Get<CombatStats>().currentAbility;
+			if ((currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE) && currentAbility.state != AbilityState.PERFORMING && currentAbility.state != AbilityState.STARTING)
+				|| !(currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE)))
+			{
+				ref Vector2 velocity = ref entity.Get<Velocity>().Value;
+				velocity.X = 0;
+				velocity.Y = 0;
+			}
 		}
 
-		public override void Start(in Entity entity) { }
+
+		public override bool Start(in Entity entity) 
+		{
+			return movements[_direction];
+		}
 
 		public override void Update(float delta, in Entity entity)
 		{
@@ -31,8 +48,8 @@ namespace GameDevIdiotsProject1.Abilities
 
 			currentTime += delta;
 
-			CombatStats stats = entity.Get<CombatStats>();
-			if (stats.currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE))
+			Ability currentAbility = entity.Get<CombatStats>().currentAbility;
+			if (currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE) && currentAbility.state == AbilityState.PERFORMING)
 				return;
 
 			ref Vector2 velocity = ref entity.Get<Velocity>().Value;

@@ -1,4 +1,5 @@
 ﻿using DefaultEcs;
+using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Util;
 
 namespace GameDevIdiotsProject1.Abilities
@@ -10,19 +11,32 @@ namespace GameDevIdiotsProject1.Abilities
 
 		public ChargeAbility(Command command) : base (command) { }
 
-		public override void Start(in Entity entity)
+		public override bool Start(in Entity entity)
 		{
-			state = AbilityState.CHARGING;
-			currentTime = 0;
+			ref Ability currentAbility = ref entity.Get<CombatStats>().currentAbility;
+			if (state == AbilityState.AVAILABLE
+				&& ((currentAbility.state != AbilityState.PERFORMING && currentAbility.state != AbilityState.STARTING)
+				|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && types.Contains(AbilityType.INTERRUPT))))
+			{
+				currentTime = 0;
+				state = AbilityState.CHARGING;
+				return true;
+			}
+
+			return false;
 		}
 
 		public override void Update(float delta, in Entity entity)
 		{
 			currentTime += delta;
-			if (state == AbilityState.COOLDOWN && currentTime > cooldown)
-				state = AbilityState.AVAILABLE;
-			else if (state == AbilityState.CHARGING && !command.IsPressed())
-				End(in entity);
+			ref Ability currentAbility = ref entity.Get<CombatStats>().currentAbility;
+			if (currentAbility.state == AbilityState.AVAILABLE)
+			{
+				if (state == AbilityState.COOLDOWN && currentTime > cooldown)
+					state = AbilityState.AVAILABLE;
+				else if (state == AbilityState.CHARGING && !command.IsPressed())
+					End(in entity);
+			}
 		}
 
 		public override void End(in Entity entity)

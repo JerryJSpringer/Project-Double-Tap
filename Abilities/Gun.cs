@@ -22,10 +22,15 @@ namespace GameDevIdiotsProject1.Abilities
 			});
 		}
 
-		public override void Start(in Entity entity)
+		public override bool Start(in Entity entity)
 		{
-			base.Start(in entity);
-			BulletFactory.Create(entity.Get<Position>().Value, entity.Get<Aim>().Value, BULLET_SPEED);
+			if (base.Start(in entity))
+			{
+				BulletFactory.Create(entity.Get<Position>().Value, entity.Get<Aim>().Value, BULLET_SPEED);
+				return true;
+			}
+
+			return false;
 		}
 	}
 }

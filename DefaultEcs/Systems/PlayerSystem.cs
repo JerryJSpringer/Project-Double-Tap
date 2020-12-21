@@ -5,6 +5,7 @@ using GameDevIdiotsProject1.DefaultEcs.Components;
 using GameDevIdiotsProject1.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
@@ -37,42 +38,19 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Vector2 position = CameraFactory.GetPosition();
 			aim.Value.X = _mouseState.X - position.X;
 			aim.Value.Y = _mouseState.Y - position.Y;
+			
+			Movement.ResetMovement(in entity);
 
-			// Update combat and movement
-			ref Velocity velocity = ref entity.Get<Velocity>();
-			ref CombatStats stats = ref entity.Get<CombatStats>();
-			var abilities = stats.abilities;
-			ref Ability currentAbility = ref stats.currentAbility;
+			// Update abilities
+			ref List<Ability> abilities = ref entity.Get<CombatStats>().abilities;
 
-			// Reset movement
-			if ((currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE) && currentAbility.state == AbilityState.COOLDOWN) 
-				|| !(currentAbility.types.Contains(AbilityType.MOVEMENTOVERRIDE)))
-			{
-				velocity.Value.X = 0;
-				velocity.Value.Y = 0;
-			}
-
-			// Update all abilities including cooldowns
+			// NOTE: Keep these loop separate, update all -> start all
 			foreach (Ability ability in abilities)
 				ability.Update(delta, in entity);
 
-			// Check if any abilities should be triggered
 			foreach (Ability ability in abilities)
-			{
-				// Do not start if ability is not pressed or if not available
-				if (!ability.command.IsPressed() || (ability.state != AbilityState.AVAILABLE && ability.state != AbilityState.ACTIVE))
-					continue;
-
-				// If current ability is over, the ability is instant, or ability can override
-				if ((currentAbility.state != AbilityState.PERFORMING
-					&& currentAbility.state != AbilityState.STARTING)
-					|| (ability.types.Contains(AbilityType.INSTANT)
-					|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && ability.types.Contains(AbilityType.INTERRUPT))))
-				{
+				if (ability.command.IsPressed())
 					ability.Start(in entity);
-					currentAbility = ability;
-				}
-			}
 		}
 	}
 }

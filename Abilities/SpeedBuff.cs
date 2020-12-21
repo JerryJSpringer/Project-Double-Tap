@@ -6,7 +6,7 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class SpeedBuff : ToggleAbility
 	{
-		public static readonly float SPEED_BUFF = 1.5f;
+		public static readonly float SPEED_BUFF = 0.2f;
 
 		public SpeedBuff(Command command) : base (command)
 		{
@@ -18,14 +18,14 @@ namespace GameDevIdiotsProject1.Abilities
 
 		protected override void AddBuff(in Entity entity)
 		{
-			ref float speed = ref entity.Get<Velocity>().speed;
-			speed *= SPEED_BUFF;
+			ref CombatStats combatStats = ref entity.Get<CombatStats>();
+			combatStats.speedBonus += SPEED_BUFF;
 		}
 
 		protected override void RemoveBuff(in Entity entity)
 		{
-			ref float speed = ref entity.Get<Velocity>().speed;
-			speed /= SPEED_BUFF;
+			ref CombatStats combatStats = ref entity.Get<CombatStats>();
+			combatStats.speedBonus -= SPEED_BUFF;
 		}
 	}
 }

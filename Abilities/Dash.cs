@@ -7,16 +7,15 @@ namespace GameDevIdiotsProject1.Abilities
 {
 	class Dash : DoubleTapAbility
 	{
-		public static readonly float COOLDOWN = 500;
+		public static readonly float COOLDOWN = 300;
 		public static readonly float DURATION = 100;
-		public static readonly float DASH_DISTANCE = 30;
-		private readonly float _distance;
+		public static readonly float DASH_WEIGHT = 10;
+		public static readonly float SPEED_BONUS = 1.5f;
 		private readonly MovementDirection _direction;
 
 		public Dash(Command command, MovementDirection direction) : base (command)
 		{
 			_direction = direction;
-			_distance = DASH_DISTANCE;
 			cooldown = COOLDOWN;
 			duration = DURATION;
 		}
@@ -25,23 +24,34 @@ namespace GameDevIdiotsProject1.Abilities
 		{
 			base.Action(in entity);
 
-			ref Vector2 position = ref entity.Get<Position>().Value;
+			ref CombatStats stats = ref entity.Get<CombatStats>();
+			stats.speedBonus += SPEED_BONUS;
 
+			ref Vector2 velocity = ref entity.Get<Velocity>().Value;
 			switch (_direction)
 			{
 				case MovementDirection.LEFT:
-					position.X += -_distance;
+					velocity.X -= DASH_WEIGHT;
 					break;
 				case MovementDirection.RIGHT:
-					position.X += _distance;
+					velocity.X += DASH_WEIGHT;
 					break;
 				case MovementDirection.UP:
-					position.Y += -_distance;
+					velocity.Y -= DASH_WEIGHT;
 					break;
 				case MovementDirection.DOWN:
-					position.Y += _distance;
+					velocity.Y += DASH_WEIGHT;
 					break;
 			}
+		}
+
+		public override void End(in Entity entity)
+		{
+			currentTime = 0;
+			state = AbilityState.COOLDOWN;
+
+			ref CombatStats stats = ref entity.Get<CombatStats>();
+			stats.speedBonus -= SPEED_BONUS;
 		}
 	}
 }
