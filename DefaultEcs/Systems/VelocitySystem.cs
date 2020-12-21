@@ -25,6 +25,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			if (dir.X != 0 || dir.Y != 0)
 				dir.Normalize();
 
+			if (entity.Has<CombatStats>())
+				speed *= 1 + entity.Get<CombatStats>().speedBonus;
+
 			// Position * direction * delta
 			position.Value.X += dir.X * speed * delta;
 			position.Value.Y += dir.Y * speed * delta;
