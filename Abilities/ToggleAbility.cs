@@ -14,10 +14,10 @@ namespace GameDevIdiotsProject1.Abilities
 			currentTime = cooldown;
 		}
 
-		public override void Start(in Entity entity)
+		public override bool Start(in Entity entity)
 		{
 			if (currentTime < cooldown)
-				return;
+				return false;
 
 			if (state == AbilityState.AVAILABLE)
 			{
@@ -31,6 +31,7 @@ namespace GameDevIdiotsProject1.Abilities
 			}
 
 			End(in entity);
+			return true;
 		}
 
 		public override void Update(float delta, in Entity entity)

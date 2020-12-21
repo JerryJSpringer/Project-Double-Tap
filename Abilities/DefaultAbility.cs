@@ -8,16 +8,33 @@ namespace GameDevIdiotsProject1.Abilities
 	{
 		public DefaultAbility(Command command) : base(command) { }
 
-		public override void Start(in Entity entity)
+		public override bool Start(in Entity entity)
 		{
-			currentTime = 0;
-			state = AbilityState.STARTING;
+			ref Ability currentAbility = ref entity.Get<CombatStats>().currentAbility;
+			if (state == AbilityState.AVAILABLE
+				&& ((currentAbility.state != AbilityState.PERFORMING && currentAbility.state != AbilityState.STARTING)
+				|| (currentAbility.types.Contains(AbilityType.OVERRIDABLE) && types.Contains(AbilityType.INTERRUPT))))
+			{
+				currentTime = 0;
+				state = AbilityState.STARTING;
+				currentAbility = this;
+
+				ref Animate animate = ref entity.Get<Animate>();
+				if (startAnimation != null)
+				{
+					animate.AnimationList[startAnimation].Reset();
+					animate.currentAnimation = startAnimation;
+				}
+				return true;
+			}
+
+			return false;
 		}
 
 		public override void Update(float delta, in Entity entity)
 		{
 			currentTime += delta;
-			ref Animate animation = ref entity.Get<Animate>();
+			ref Animate animate = ref entity.Get<Animate>();
 
 			if (state == AbilityState.COOLDOWN && currentTime > cooldown)
 			{
@@ -25,16 +42,17 @@ namespace GameDevIdiotsProject1.Abilities
 			}
 			else if (state == AbilityState.STARTING && currentTime > startup)
 			{
+				currentTime = 0;
 				state = AbilityState.PERFORMING;
-				if (startAnimation != null)
-					animation.currentAnimation = startAnimation;
+				if (updateAnimation != null)
+				{
+					animate.AnimationList[updateAnimation].Reset();
+					animate.currentAnimation = updateAnimation;
+				}
 			}
-			else if (state == AbilityState.PERFORMING)
+			else if (state == AbilityState.PERFORMING && currentTime > duration)
 			{
-				if (currentTime > duration)
-					End(in entity);
-				else if (updateAnimation != null)
-					animation.currentAnimation = updateAnimation;
+				End(in entity);
 			}
 		}
 
@@ -42,13 +60,11 @@ namespace GameDevIdiotsProject1.Abilities
 		{
 			currentTime = 0;
 			state = AbilityState.COOLDOWN;
-			ref Animate animate= ref entity.Get<Animate>();
 
-			//reset the current animation to first frame to prevent weird animation looping
-			animate.AnimationList[animate.currentAnimation].Reset();
-
+			ref Animate animate = ref entity.Get<Animate>();
 			if (endAnimation != null)
 			{
+				animate.AnimationList[endAnimation].Reset();
 				animate.currentAnimation = endAnimation;
 			}
 		}

@@ -11,7 +11,7 @@ namespace GameDevIdiotsProject1.Abilities
 		protected float currentTime;
 		protected float startup;
 		protected float cooldown;
-		public float duration { get; protected set; }
+		public float duration;
 		protected string startAnimation;
 		protected string updateAnimation;
 		protected string endAnimation;
@@ -26,7 +26,7 @@ namespace GameDevIdiotsProject1.Abilities
 			state = AbilityState.AVAILABLE;
 		}
 
-		public abstract void Start(in Entity entity);
+		public abstract bool Start(in Entity entity);
 		public abstract void Update(float delta, in Entity entity);
 		public abstract void End(in Entity entity);
 	}
