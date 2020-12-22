@@ -124,7 +124,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			var AnimationTable = new Dictionary<string, Animation>();
 
 			// CREATE ANIMATIONS (should probably make a function that automates this)
-			Animation walkDown = new Animation();
+			Animation walkDown = new Animation(loop: true);
 			walkDown.AddFrame(new Rectangle(0, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
 			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
 			walkDown.AddFrame(new Rectangle(WALK_SPRITE_WIDTH * 2, 16, WALK_SPRITE_WIDTH, WALK_SPRITE_HEIGHT), TimeSpan.FromSeconds(WALK_FRAME_LENGTH));
@@ -152,7 +152,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			//dodgeRoll.AddFrame(new Rectangle(DODGE_SPRITE_WIDTH * 15, 32, DODGE_SPRITE_WIDTH, DODGE_SPRITE_HEIGHT), TimeSpan.FromSeconds(DODGE_FRAME_LENGTH));
 
 			//Idle Animation
-			Animation idle = new Animation();
+			Animation idle = new Animation(loop: true);
 			idle.AddFrame(new Rectangle(0, 0, IDLE_SPRITE_WIDTH, IDLE_SPRITE_HEIGHT), TimeSpan.FromSeconds(IDLE_FRAME_LENGTH));
 			idle.AddFrame(new Rectangle(IDLE_SPRITE_WIDTH, 0, IDLE_SPRITE_WIDTH, IDLE_SPRITE_HEIGHT), TimeSpan.FromSeconds(IDLE_FRAME_LENGTH));
 

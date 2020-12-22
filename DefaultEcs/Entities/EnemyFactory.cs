@@ -76,7 +76,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			var AnimationTable = new Dictionary<string, Animation>();
 
 			//Idle Animation
-			Animation idle = new Animation();
+			Animation idle = new Animation(loop: true);
 			idle.AddFrame(new Rectangle(0, 0, IDLE_SPRITE_WIDTH, IDLE_SPRITE_HEIGHT), TimeSpan.FromSeconds(IDLE_FRAME_LENGTH));
 			idle.AddFrame(new Rectangle(IDLE_SPRITE_WIDTH, 0, IDLE_SPRITE_WIDTH, IDLE_SPRITE_HEIGHT), TimeSpan.FromSeconds(IDLE_FRAME_LENGTH));
 

@@ -9,10 +9,12 @@ namespace GameDevIdiotsProject1.Graphics
         private readonly List<AnimationFrame> frames;
         private TimeSpan timeIntoAnimation;
         private float _abilityDuration;
+        private bool _loop;
 
-        public Animation(float abilityDuration = 0)
+        public Animation(float abilityDuration = 0, bool loop = false)
         {
             _abilityDuration = abilityDuration;
+            _loop = loop;
             frames = new List<AnimationFrame>();
         }
 
@@ -108,7 +110,10 @@ namespace GameDevIdiotsProject1.Graphics
 
             double remainder;
             if (secondsIntoAnimation > Duration.TotalSeconds)
-                remainder = Duration.TotalSeconds;
+                if (_loop)
+                    remainder = 0;
+                else
+                    remainder = Duration.TotalSeconds;
             else
                 remainder = secondsIntoAnimation % Duration.TotalSeconds;
 
