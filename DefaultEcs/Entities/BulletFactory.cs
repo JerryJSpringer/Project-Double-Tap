@@ -50,7 +50,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Entities
 			bullet.Set(new RenderInfo
 			{
 				sprite = _texture,
-				bounds = new Rectangle(0, 0, 4, 4),
+				bounds = new Rectangle(0, 0, 16, 16),
 				color = Color.White,
 				flip = false,
 				scale = _scale
