@@ -11,5 +11,6 @@ namespace GameDevIdiotsProject1.DefaultEcs.Components
 		public Color color;
 		public bool flip;
 		public float scale;
+		public float layerDepth;
 	}
 }
