@@ -39,7 +39,6 @@ namespace GameDevIdiotsProject1
 			Window.AllowUserResizing = true;
 
 			Content.RootDirectory = "Content";
-			IsMouseVisible = true;
 		}
 
 		protected override void Initialize()
@@ -48,9 +47,6 @@ namespace GameDevIdiotsProject1
 			_graphics.PreferredBackBufferHeight = GAME_SIZE;
 			_graphics.PreferredBackBufferWidth = GAME_SIZE;
 			_graphics.ApplyChanges();
-
-			// Init camera factory
-			CameraFactory.Init();
 
 			// Update graphics devices
 			var viewportAdapter = new BoxingViewportAdapter(Window, _graphics.GraphicsDevice, GAME_SIZE, GAME_SIZE);
@@ -80,6 +76,9 @@ namespace GameDevIdiotsProject1
 		{
 			_collisionComponent = new CollisionComponent(
 				new RectangleF(0, 0, _tiledMap.WidthInPixels, _tiledMap.HeightInPixels));
+
+			CursorFactory.Init(_world, _collisionComponent, Content.Load<Texture2D>("gamedev"), 2f);
+			CursorFactory.Create();
 
 			PlayerFactory.Init(_world, _collisionComponent, Content.Load<Texture2D>("gamedev"), 2f);
 			PlayerFactory.Create(new Vector2());
@@ -118,6 +117,7 @@ namespace GameDevIdiotsProject1
 			_graphics.Dispose();
 
 			// Factories
+			CursorFactory.Dispose();
 			PlayerFactory.Dispose();
 			EnemyFactory.Dispose();
 			BulletFactory.Dispose();
