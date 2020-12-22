@@ -108,7 +108,7 @@ namespace GameDevIdiotsProject1.Graphics
 
             double remainder;
             if (secondsIntoAnimation > Duration.TotalSeconds)
-                remainder = 0;
+                remainder = Duration.TotalSeconds;
             else
                 remainder = secondsIntoAnimation % Duration.TotalSeconds;
 
