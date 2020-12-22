@@ -63,7 +63,8 @@ namespace GameDevIdiotsProject1.Util
 				bounds = new Rectangle(0, 0, 16, 16),
 				color = Color.White,
 				flip = false,
-				scale = _scale
+				scale = _scale,
+				layerDepth = 1f
 			});
 		}
 
