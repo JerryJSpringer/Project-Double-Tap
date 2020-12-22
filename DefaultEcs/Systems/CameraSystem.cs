@@ -32,8 +32,7 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 		protected override void Update(float delta, in Entity entity)
 		{
 			Vector2 charPosition = entity.Get<Position>().Value;
-
-			Vector2 cameraPosition = new Vector2
+			_camera.LookAt(new Vector2
 			{
 				X = (charPosition.X <= _center) ? _center
 				: (charPosition.X >= _tiledMap.WidthInPixels - _center) ? _tiledMap.WidthInPixels - _center
@@ -42,13 +41,9 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 				Y = (charPosition.Y <= _center) ? _center
 				: (charPosition.Y >= _tiledMap.HeightInPixels - _center) ? _tiledMap.HeightInPixels - _center
 				: charPosition.Y
-			};
+			});
 
-			CameraFactory.Update(Vector2.Transform(charPosition, _camera.GetViewMatrix()) 
-				+ new Vector2(_viewportAdapter.Viewport.X, _viewportAdapter.Viewport.Y));
-
-			_camera.LookAt(cameraPosition);
-			
+			CursorFactory.UpdateCamera(_camera.GetInverseViewMatrix(), new Vector2(_viewportAdapter.Viewport.X, _viewportAdapter.Viewport.Y));
 		}
 	}
 }

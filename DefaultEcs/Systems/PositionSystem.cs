@@ -12,29 +12,32 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			base(world.GetEntities()
 				.With<Position>()
 				.With<RenderInfo>()
-				.With<Collision>()
 				.AsSet()) { }
 
 		protected override void Update(float delta, in Entity entity)
 		{
 			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
-			ref Collision collision = ref entity.Get<Collision>();
 
 			renderInfo.position.X = position.X - (renderInfo.bounds.Width * (renderInfo.scale) / 2);
 			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height * (renderInfo.scale) / 2);
 
-			if (collision.collisionActor.Bounds is RectangleF rectangle)
+			if (entity.Has<Collision>())
 			{
-				rectangle.Position = new Vector2(
-					position.X - (rectangle.Width / 2),
-					position.Y - (rectangle.Height / 2));
+				ref Collision collision = ref entity.Get<Collision>();
 
-				collision.collisionActor.Bounds.Position = rectangle.Position;
-			}
-			else if (collision.collisionActor.Bounds is CircleF)
-			{
-				collision.collisionActor.Bounds.Position = position;
+				if (collision.collisionActor.Bounds is RectangleF rectangle)
+				{
+					rectangle.Position = new Vector2(
+						position.X - (rectangle.Width / 2),
+						position.Y - (rectangle.Height / 2));
+
+					collision.collisionActor.Bounds.Position = rectangle.Position;
+				}
+				else if (collision.collisionActor.Bounds is CircleF)
+				{
+					collision.collisionActor.Bounds.Position = position;
+				}
 			}
 		}
 	}
