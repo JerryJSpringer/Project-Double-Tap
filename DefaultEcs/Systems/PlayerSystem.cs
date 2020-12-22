@@ -35,10 +35,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 		{
 			// Update aiming
 			ref Aim aim = ref entity.Get<Aim>();
-			Vector2 position = CameraFactory.GetPosition();
-			aim.Value.X = _mouseState.X - position.X;
-			aim.Value.Y = _mouseState.Y - position.Y;
-			
+			aim.Value = CursorFactory.Update(new Vector2(_mouseState.X, +_mouseState.Y)) - entity.Get<Position>().Value;
+
 			Movement.ResetMovement(in entity);
 
 			// Update abilities
