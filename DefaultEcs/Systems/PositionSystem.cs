@@ -19,8 +19,8 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 			Vector2 position = entity.Get<Position>().Value;
 			ref RenderInfo renderInfo = ref entity.Get<RenderInfo>();
 
-			renderInfo.position.X = position.X - (renderInfo.bounds.Width * (renderInfo.scale) / 2);
-			renderInfo.position.Y = position.Y - (renderInfo.bounds.Height * (renderInfo.scale) / 2);
+			renderInfo.position.X = position.X;
+			renderInfo.position.Y = position.Y;
 
 			if (entity.Has<Collision>())
 			{
