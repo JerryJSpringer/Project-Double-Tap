@@ -4,6 +4,7 @@ using GameDevIdiotsProject1.DefaultEcs.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using System;
 
 namespace GameDevIdiotsProject1.DefaultEcs.Systems
 {
@@ -26,13 +27,14 @@ namespace GameDevIdiotsProject1.DefaultEcs.Systems
 
 		protected override void Update(float delta, ref RenderInfo component)
 		{
+			Console.WriteLine(component.bounds.Width * component.scale / 2 + " " + component.bounds.Height * component.scale / 2);
 			_batch.Draw(
 				component.sprite, 
 				component.position, 
 				component.bounds, 
 				component.color, 
-				0f, 
-				new Vector2(0,0), 
+				0, 
+				new Vector2(component.bounds.Width / 2, component.bounds.Height / 2), 
 				component.scale, 
 				(component.flip) ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
 				component.layerDepth
